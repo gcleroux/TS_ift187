@@ -2,17 +2,46 @@
  un script SQL pour les invariants requis – vues, routines et déclencheurs (triggers)
  ############################################################################*/
 
-/* ####################################################################
- Liste des modifications a faire dans le doc
-
-   - Ajouter les predicats qui justifient la presence des triggers
-   - Faire la mise en page du doc
-   - Maybe mettre des views, idk on a pas fait les requetes encore alors je sais pas quoi mettre mais on va surement en avoir une couple
-
- ####################################################################*/
+-- Choses a modifier
+-- Ajouter un invariant pour qu'un prix masculin soit descerne a un homme
 
 
 
+--######################################################################################################################
+-- Trigger qui s'assure qu'un artisan ne peut pas avoir une date de deces inferieure a sa date de naissance
+------------------------------------------------------------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION validation_date_deces()
+RETURNS TRIGGER AS
+    $$
+    BEGIN
+        if (
+            select date_naissance
+            from date_naissances
+            where id_artisan = new.id_artisan
+        ) > new.date_deces
+        THEN
+        RAISE NOTICE 'Erreur lors de l''insertion. L''artisan n''etait pas ne a cette date!';
+        RETURN null;
+
+        ELSE RETURN new;
+        end if;
+    END
+    $$
+LANGUAGE plpgsql;
+
+create trigger insertions_date_deces
+    before insert
+    on date_deces
+    for each row
+    execute procedure validation_date_deces();
+--######################################################################################################################
+
+
+
+--######################################################################################################################
+-- Trigger qui s'assure qu'un doublage peut etre fait seulement si les deux artisans participent au meme film et que l'un
+-- d'eux est un acteur, et que l'autre est un doubleur
+------------------------------------------------------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION validation_doublages_films_participations()
 RETURNS TRIGGER AS
     $$
@@ -25,8 +54,7 @@ RETURNS TRIGGER AS
                 where df.id_film = new.id_film and
                       df.id_artisan = new.artisan_doubleur and
                       df.id_emploi = (select id_emploi from emplois where emploi = 'Doubleur')
-
-            )
+                )
 
             -- Verification de l'artisan double
             or not exists(
@@ -35,7 +63,8 @@ RETURNS TRIGGER AS
                 where df.id_film = new.id_film and
                       df.id_artisan = new.artisan_double and
                       df.id_emploi = (select id_emploi from emplois where emploi = 'Acteur')
-            )) then
+                )
+            ) then
             raise notice 'Erreur dans la selection des artisans. Veuillez verifier qu''ils sont bien dans la table participation_films avec les bon emplois!';
             return null;
 
@@ -51,16 +80,22 @@ create trigger insertions_doublages_films_participations
     on doublages_films
     for each row
     execute procedure validation_doublages_films_participations();
+--######################################################################################################################
 
 
 
+--######################################################################################################################
+-- Trigger qui s'assure que un artisan ne peut pas se doubler lui meme.
 
+-- ** Techniquement possible qu'un artisan puisse se doubler lui meme dans une autre langue, mais le prof nous a indique
+-- que nous devrions avoir une contrainte pour ne pas avoir de duplicata **
+------------------------------------------------------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION validation_doublages_films_duplicata()
 RETURNS TRIGGER AS
     $$
     BEGIN
         if (new.artisan_doubleur = new.artisan_double) then
-            raise notice 'L''artisan doubleur ne peut pas etre l''artisan double!';
+            raise notice 'Erreur lors de l''insertion. L''artisan doubleur ne peut pas etre l''artisan double!';
             return null;
 
         else return new;
@@ -75,10 +110,13 @@ create trigger insertions_doublages_films_duplicata
     on doublages_films
     for each row
     execute procedure validation_doublages_films_duplicata();
+--######################################################################################################################
 
 
 
--- TRIGGER PARTICIPATION_FILMS
+--######################################################################################################################
+-- Trigger qui s'assure qu'un artisan soit ne a la sortie d'un film pour assurer la validite de sa participation
+------------------------------------------------------------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION validation_participations_films_date_naissance()
 RETURNS TRIGGER AS
     $$
@@ -92,7 +130,7 @@ RETURNS TRIGGER AS
             from films
             where id_film = new.id_film))
             then
-            raise notice 'L''artisan n''etait pas ne a la sortie du film!';
+            raise notice 'Erreur lors de l''insertion. L''artisan n''etait pas ne a la sortie du film!';
             return null;
 
         else return new;
@@ -107,9 +145,13 @@ create trigger insertions_participations_films
     on participations_films
     for each row
     execute procedure validation_participations_films_date_naissance();
+--######################################################################################################################
 
 
--- TRIGGER REMISE_PRIX_FILMS
+
+--######################################################################################################################
+-- Trigger qui s'assure qu'un film soit bien sorti en salle lors de l'annee de la remise d'un prix
+------------------------------------------------------------------------------------------------------------------------
 create or replace function validation_remises_prix_films_annee()
 returns trigger as
     $$
@@ -121,7 +163,7 @@ returns trigger as
                 from films
                 where id_film = new.id_film)
                 ) then
-                raise notice 'Le film n''etait pas sorti a l''annee de la remise de ce prix!';
+                raise notice 'Erreur lors de l''insertion. Le film n''etait pas sorti a l''annee de la remise de ce prix!';
                 return null;
 
             else return new;
@@ -135,10 +177,13 @@ create trigger insertions_remises_prix_films
     on remises_prix_films
     for each row
     execute procedure validation_remises_prix_films_annee();
+--######################################################################################################################
 
 
 
--- TRIGGER REMISE_PRIX_ARTISANS
+--######################################################################################################################
+-- Trigger qui s'assure qu'un artisan soit bien present dans un film pour assurer la validite du prix qu'il lui est remis
+------------------------------------------------------------------------------------------------------------------------
 create or replace function validation_remises_prix_artisans_participation()
 returns trigger as
     $$
@@ -149,7 +194,7 @@ returns trigger as
                     from participations_films pf
                     where pf.id_artisan = new.id_artisan)
                 ) then
-                raise notice 'L''artisan ne fait pas parti de ce film!';
+                raise notice 'Erreur lors de l''insertion. L''artisan ne fait pas parti de ce film!';
                 return null;
 
             else return new;
@@ -163,12 +208,13 @@ create trigger insertions_remises_prix_artisans_participation
     on remises_prix_artisans
     for each row
     execute procedure validation_remises_prix_artisans_participation();
+--######################################################################################################################
 
 
 
-
-
--- TRIGGER REMISE_PRIX_ARTISANS
+--######################################################################################################################
+-- Trigger qui s'assure qu'un artisan soit ne a l'annee de la remise de son prix
+------------------------------------------------------------------------------------------------------------------------
 create or replace function validation_remises_prix_artisans_annee()
 returns trigger as
     $$
@@ -180,7 +226,7 @@ returns trigger as
                 from films
                 where id_film = new.id_film)
                 ) then
-                raise notice 'Le film n''etait pas sorti a l''annee de la remise de ce prix!';
+                raise notice 'Erreur lors de l''insertion. Le film n''etait pas sorti a l''annee de la remise de ce prix!';
                 return null;
 
             else return new;
@@ -194,10 +240,13 @@ create trigger insertions_remises_prix_artisans_annee
     on remises_prix_artisans
     for each row
     execute procedure validation_remises_prix_artisans_annee();
+--######################################################################################################################
 
 
 
--- TRIGGER RECETTES POUR LE PAYS
+--######################################################################################################################
+-- Trigger qui s'assure qu'un film est bien ete presente dans un pays dans leqyel pour qu'il y ait des recettes associees
+------------------------------------------------------------------------------------------------------------------------
 create or replace function validation_recettes_pays()
 returns trigger as
     $$
@@ -208,7 +257,7 @@ returns trigger as
                 where pp.id_film = new.id_film and
                       pp.id_pays = new.id_pays
                 )) then
-                raise notice 'Le film n''a pas ete presente dans ce pays!';
+                raise notice 'Erreur lors de l''insertion. Le film n''a pas ete presente dans ce pays!';
                 return null;
 
             else return new;
@@ -222,11 +271,13 @@ create trigger insertions_recettes_pays
     on recettes
     for each row
     execute procedure validation_recettes_pays();
+--######################################################################################################################
 
 
 
-
--- TRIGGER RECETTES POUR L'ANNEE
+--######################################################################################################################
+-- Trigger qui s'assure qu'un film est bien sorti a l'annee des recettes associees
+------------------------------------------------------------------------------------------------------------------------
 create or replace function validation_recettes_annee()
 returns trigger as
     $$
@@ -238,7 +289,7 @@ returns trigger as
                 from films
                 where id_film = new.id_film)
                 ) then
-                raise notice 'Le film n''etait pas sorti a l''annee entree!';
+                raise notice 'Erreur lors de l''insertion. Le film n''etait pas sorti a l''annee entree!';
                 return null;
 
             else return new;
@@ -252,3 +303,4 @@ create trigger insertions_recettes_annee
     on recettes
     for each row
     execute procedure validation_recettes_annee();
+--######################################################################################################################
