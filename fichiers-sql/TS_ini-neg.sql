@@ -82,7 +82,7 @@ INSERT INTO Date_naissances(id_artisan, date_naissance) VALUES
 INSERT INTO Date_deces(id_artisan, date_deces) VALUES
  (1, '1850-01-01');
 -- Insertion invalide, car l'artisan ne peut pas mourir avant de naitre.
-
+-- Tel qu'indique par l'invariant validation_date_deces().
 
 
 /* ###################################################################
