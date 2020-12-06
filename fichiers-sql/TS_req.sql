@@ -1,29 +1,11 @@
+
 /*############################################################################
  un script SQL pour les requêtes proposées – routines équivalentes à des sélections
  ############################################################################*/
 
-/* ####################################################################
- Liste des modifications a faire dans le doc
-
-   - Ajouter les requetes exemples du prof
-   - Faire une mise en page et des predicats qui separe individuellement chaque requetes
-####################################################################*/
-
-/*
-1. Quels sont les films réalisés par Sergio Leone et tournés en Espagne (en tout ou en partie)?
-2. Quels sont les films produits aux États-Unis pour lesquels il existe une version doublée au Québec?
-3. Dans quels films Ingrid Bergman et Marcello Mastroianni ont-ils joué ensemble?
-4. Quels sont les films coproduits par un producteur français et un producteur italien?
-5. Quels sont les acteurs italiens ayant gagné le prix d’interprétation masculine au Festival de Cannes?
-6. Quelles sont les actrices ayant une triple nationalité?
-7. Qui sont les réalisateurs polonais ayant tourné des films avant 1939?
-8. Quelle est la distribution par pays des Palmes d’or au Festival de Cannes?
-9. Quels sont les 10 films québécois ayant eu le plus d’entrées payantes à leur sortie en salle, au Québec, au Canada, en France, aux États-Unis?
-10. Quels sont les acteurs ayant doublé Clint Eastwood en français dans au moins deux films?
- */
 
 
-
+--######################################################################################################################
 -- 1. Quels sont les films réalisés par Sergio Leone et tournés en Espagne (en tout ou en partie)?
 --------------------------------------------------------------------------------------------------
 select films.id_film, films.titre
@@ -49,9 +31,11 @@ and pf.id_emploi = (
 -- Le film doit etre tourne en espagne
 and pt.id_pays = 'ES'
 ;
+--######################################################################################################################
 
 
 
+--######################################################################################################################
 -- 2. Quels sont les films produits aux États-Unis pour lesquels il existe une version doublée au Québec?
 ---------------------------------------------------------------------------------------------------------
 select distinct films.id_film, films.titre  -- On veut que les films apparaissent seulement une fois
@@ -65,9 +49,11 @@ where pf.localisation = 'US' and
 -- Selection de la langue en francais quebecois
 df.id_langue = 'frqc'
 ;
+--######################################################################################################################
 
 
 
+--######################################################################################################################
 -- 3. Dans quels films Ingrid Bergman et Marcello Mastroianni ont-ils joué ensemble?
 ------------------------------------------------------------------------------------
 select films.id_film, films.titre
@@ -98,9 +84,11 @@ and exists(
         )
     )
 ;
+--######################################################################################################################
 
 
 
+--######################################################################################################################
 -- 4. Quels sont les films coproduits par un producteur français et un producteur italien?
 ------------------------------------------------------------------------------------------
 select films.id_film, films.titre
@@ -121,9 +109,11 @@ and exists(
           productions_films.id_film = pf.id_film
     )
 ;
+--######################################################################################################################
 
 
 
+--######################################################################################################################
 -- 5. Quels sont les acteurs italiens ayant gagné le prix d’interprétation masculine au Festival de Cannes?
 -----------------------------------------------------------------------------------------------------------
 select artisans.id_artisan, artisans.prenom, artisans.nom
@@ -138,8 +128,11 @@ where nationalites.id_pays = 'IT' and
           where nom_prix ilike '%Festival de Cannes%interpretation masculine%'
       )
 ;
+--######################################################################################################################
 
 
+
+--######################################################################################################################
 -- 6. Quelles sont les actrices ayant une triple nationalité?
 -------------------------------------------------------------
 select a.id_artisan, a.prenom, a.nom
@@ -151,9 +144,11 @@ and (
     group by n.id_artisan
     ) = 3
 ;
+--######################################################################################################################
 
 
 
+--######################################################################################################################
 -- 7. Qui sont les réalisateurs polonais ayant tourné des films avant 1939?
 ---------------------------------------------------------------------------
 select a.id_artisan, a.prenom, a.nom
@@ -179,9 +174,11 @@ and pf.id_emploi = (
     where emploi like 'Realisateur'
     )
 ;
+--######################################################################################################################
 
 
 
+--######################################################################################################################
 -- 8. Quelle est la distribution par pays des Palmes d’or au Festival de Cannes?
 --------------------------------------------------------------------------------
 select pf.localisation, count(*) as nb_total_de_palmes_dor
@@ -193,21 +190,25 @@ join prix p using (id_prix)
 where p.nom_prix ilike '%Festival de Cannes%Palmes d’or%'
 
 -- On regroupe les films selon leur origine
-group by (pf.localisation);
+group by (pf.localisation)
+;
+--######################################################################################################################
 
 
 
+--######################################################################################################################
 -- 9. Quels sont les 10 films québécois ayant eu le plus d’entrées payantes à leur sortie en salle, au Québec, au Canada, en France, aux États-Unis?
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Comme nous ne considerons pas que le Quebec est un pays, nous allons remplacer cette selection par la suivante qui est plus idoine
 -- 9. Quels sont les 10 films canadiens ayant eu le plus d’entrées payantes à leur sortie en salle, au Canada, en France, aux États-Unis?
 
+-- Creation d'une view qui regroupe tous les films canadiens de la bd
 CREATE OR REPLACE VIEW films_canadiens(id_film, titre, annee_de_parution, origine) as (
     select f.id_film, f.titre, f.annee_de_parution, pf.localisation
     from films f
     join productions_films pf using (id_film)
-    where pf.localisation = 'CA'
+    where pf.localisation = 'CA' -- Le film est canadien
 );
 
 -- Les films canadiens qui ont eu le plus de revenus dans leur annee de sortie au Canada
@@ -236,9 +237,11 @@ where r.annee = fc.annee_de_parution and
       r.id_pays = 'US'
 order by revenus desc
 limit 10;
+--######################################################################################################################
 
 
 
+--######################################################################################################################
 -- 10. Quels sont les acteurs ayant doublé Clint Eastwood en français dans au moins deux films?
 -----------------------------------------------------------------------------------------------
 select a.id_artisan, a.prenom, a.nom
@@ -251,7 +254,8 @@ where (
         from artisans
         where prenom = 'Clint' and
               nom = 'Eastwood')
-    and df.id_langue like 'fr%'
+    and df.id_langue like 'fr%' -- On confond toutes les varietes linguistiques de la langue francaise
     group by id_artisan
     ) >= 2
 ;
+--######################################################################################################################
