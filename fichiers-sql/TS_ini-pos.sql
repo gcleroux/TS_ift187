@@ -2,6 +2,7 @@
  un script SQL d’insertions de données de test positives
  ####################################################################### */
 
+
 /* ####################################################################
  Liste des modifications a faire dans le doc
 
@@ -76,7 +77,7 @@ INSERT INTO Genres(id_genre) VALUES
  ('Policier'),
  ('Politique'),
  ('Romance'),
- ('Science-fiction'),
+ ('Science fiction'),
  ('Spectacle'),
  ('Telefilm'),
  ('Theatre'),
@@ -118,7 +119,7 @@ INSERT INTO Studios_Productions(nom_studio, localisation) VALUES
  ('DC Comics', 'US'),
  ('Syncopy', 'US'),
  ('River Road Entertainment', 'US'),
- ('Cine-Produzioni Associate', 'IT'),   --#30
+ ('La casa de pelicula de Papel', 'ES'),   --#30
  ('Barunson E&A', 'KR'),
  ('Fuji Television', 'JP'),
  ('Park Ex Pictures', 'CA'),
@@ -317,18 +318,6 @@ INSERT INTO Remises_Prix_Films(id_film, id_prix, annee) VALUES
  (16, 33, 2018);
 
 
-/**
-  *Recettes
- */
-INSERT INTO Recettes(id_film, id_pays, annee, revenus) VALUES
- (2, 'GB', 2001, 90228837),
- (18, 'CA', 2006, 50000000),
- (18, 'FR', 2006, 25000000),
- (18, 'US', 2006, 40000000),
- (19, 'CA', 1984, 9000000),
- (19, 'FR', 1984, 0),
- (19, 'US', 1984, 0);
-
 
 /**
   *Pays tournages
@@ -361,15 +350,6 @@ INSERT INTO SOUS_TITRES_FILMS(id_film, id_langue) VALUES
 (3, 'it');
 
 
-/**
-  *Doublage de films
- */
-INSERT INTO DOUBLAGES_FILMS(id_film, artisan_doubleur, artisan_double, id_langue) VALUES
- (2, 3, 4, 'fr'),
- (1, 1, 34, 'frqc'),
- (17, 41, 40, 'fr'),
- (17, 42, 40, 'frqc');
-
 
 /**
   *Participation film
@@ -384,10 +364,23 @@ INSERT INTO Participations_films(id_artisan,id_film, id_emploi) VALUES
  (36, 12, 6),
  (37, 12, 1),
  (38, 12, 1),
+ (39, 14, 4),
  (40, 17, 6),
  (41, 17, 17),
- (42, 17, 17);
+ (42, 17, 17),
+ (40, 4, 6),
+ (41, 4, 17),
+ (42, 4, 17);
 
+
+/**
+  *Doublage de films
+ */
+INSERT INTO DOUBLAGES_FILMS(id_film, artisan_doubleur, artisan_double, id_langue) VALUES
+ (4, 41, 40, 'fr'),
+ (4, 42, 40, 'frqc'),
+ (17, 41, 40, 'fr'),
+ (17, 42, 40, 'frqc');
 
 /**
   *Nationalités
@@ -420,9 +413,19 @@ INSERT INTO PAYS_PRESENTES(id_film, id_pays) VALUES
 (18, 'FR'),
 (18, 'US'),
 (19, 'CA'),
-(19, 'FR'),
 (19, 'US');
 
+
+/**
+  *Recettes
+ */
+INSERT INTO Recettes(id_film, id_pays, annee, revenus) VALUES
+ (2, 'GB', 2001, 90228837),
+ (18, 'CA', 2006, 50000000),
+ (18, 'FR', 2006, 25000000),
+ (18, 'US', 2006, 40000000),
+ (19, 'CA', 1984, 9000000),
+ (19, 'US', 1984, 0);
 
 /**
   *Evaluation des films
@@ -445,7 +448,7 @@ That "Fellowship of the Ring" doesn''t match my imaginary vision of Middle-earth
 /**
   *Productions_films
  */
-INSERT INTO Production_films(id_film, id_studio, localisation) VALUES
+INSERT INTO Productions_films(id_film, id_studio, localisation) VALUES
 (1, 3,'US'),
 (2, 19,'US'),
 (3, 22,'US'),
@@ -462,10 +465,11 @@ INSERT INTO Production_films(id_film, id_studio, localisation) VALUES
 (8, 28,'US'),
 (9, 25,'US'),
 (10, 29,'US'),
-(11, 30,'IT'),
+(11, 30,'ES'),
 (15, 31,'KR'),
 (18, 33,'CA'),
-(19, 34,'CA');
+(19, 34,'CA'),
+(16, 32, 'JP');
 
 
 /**
@@ -491,6 +495,7 @@ COPY LANGUES
 FROM '~/projet_ift187/fichiers-csv/langues.csv'
 WITH (HEADER, FORMAT CSV, DELIMITER ',');
 
+insert into langues(id_langue, nom_langue) VALUES ('frqc', 'Francais Quebecois');
 
 /*
 Insertions a partir de psql

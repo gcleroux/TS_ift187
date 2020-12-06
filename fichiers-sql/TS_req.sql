@@ -4,7 +4,7 @@
  ############################################################################*/
 
 
-
+-- Marche pas
 --######################################################################################################################
 -- 1. Quels sont les films réalisés par Sergio Leone et tournés en Espagne (en tout ou en partie)?
 --------------------------------------------------------------------------------------------------
@@ -53,6 +53,7 @@ df.id_langue = 'frqc'
 
 
 
+-- Marche pas
 --######################################################################################################################
 -- 3. Dans quels films Ingrid Bergman et Marcello Mastroianni ont-ils joué ensemble?
 ------------------------------------------------------------------------------------
@@ -87,7 +88,7 @@ and exists(
 --######################################################################################################################
 
 
-
+-- Marche pas
 --######################################################################################################################
 -- 4. Quels sont les films coproduits par un producteur français et un producteur italien?
 ------------------------------------------------------------------------------------------
@@ -135,14 +136,16 @@ where nationalites.id_pays = 'IT' and
 --######################################################################################################################
 -- 6. Quelles sont les actrices ayant une triple nationalité?
 -------------------------------------------------------------
-select a.id_artisan, a.prenom, a.nom
-from artisans a
-where sexe = 'F'
-and (
-    select count(id_artisan)
+with nb_nationalites_femme(id_artisan, prenom, nom, total_nationalites) as(
+    select a.id_artisan, a.prenom, a.nom, count(*) as total_nationalites
     from nationalites n
-    group by n.id_artisan
-    ) = 3
+    join artisans a using (id_artisan)
+    where sexe = 'F'
+    group by a.id_artisan
+)
+select *
+from nb_nationalites_femme nnf
+where nnf.total_nationalites = 3
 ;
 --######################################################################################################################
 
@@ -187,7 +190,7 @@ join productions_films pf using (id_film)
 join prix p using (id_prix)
 
 -- Le prix doit etre la palme d'or de Cannes
-where p.nom_prix ilike '%Festival de Cannes%Palmes d’or%'
+where p.nom_prix ilike '%Festival de Cannes%Palmes d''or%'
 
 -- On regroupe les films selon leur origine
 group by (pf.localisation)
@@ -240,15 +243,13 @@ limit 10;
 --######################################################################################################################
 
 
-
 --######################################################################################################################
 -- 10. Quels sont les acteurs ayant doublé Clint Eastwood en français dans au moins deux films?
 -----------------------------------------------------------------------------------------------
-select a.id_artisan, a.prenom, a.nom
-from artisans a
-where (
-    select count(*)
+with nb_doublages_clint_eastwood(id_artisan, prenom, nom, total_doublages) as(
+    select a.id_artisan, a.prenom, a.nom, count(*)
     from doublages_films df
+    join artisans a on df.artisan_doubleur = a.id_artisan
     where artisan_double = (
         select id_artisan
         from artisans
@@ -256,6 +257,9 @@ where (
               nom = 'Eastwood')
     and df.id_langue like 'fr%' -- On confond toutes les varietes linguistiques de la langue francaise
     group by id_artisan
-    ) >= 2
+)
+select *
+from nb_doublages_clint_eastwood
+where total_doublages >= 2
 ;
 --######################################################################################################################
