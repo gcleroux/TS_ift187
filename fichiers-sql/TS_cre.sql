@@ -12,6 +12,8 @@
 
  ####################################################################*/
 
+ -- Les prix devrait avoir un attribut pour dire s'il peut etre donne a un homme, femme, ou mixte
+
 
 
 /*######################################################################################################################
@@ -196,6 +198,15 @@ CREATE TABLE GENRES_FILMS (
   CONSTRAINT GENRES_FILMS_ce1 FOREIGN KEY (id_genre) REFERENCES GENRES(id_genre)
 );
 
+CREATE TABLE PRODUCTIONS_FILMS (
+    id_film BIGINT NOT NULL,
+    id_studio BIGINT NOT NULL,
+    localisation Pays NOT NULL,
+
+    CONSTRAINT PRODUCTIONS_FILMS_cc0 PRIMARY KEY (id_film, id_studio, localisation),
+    CONSTRAINT PARTICIPATIONS_FILMS_ce0 FOREIGN KEY (id_film) REFERENCES FILMS(id_film),
+    CONSTRAINT PARTICIPATIONS_FILMS_ce1 FOREIGN KEY (id_studio, localisation) REFERENCES STUDIOS_PRODUCTIONS(id_studio, localisation)
+);
 
 CREATE TABLE PARTICIPATIONS_FILMS (
   id_artisan BIGINT NOT NULL,
