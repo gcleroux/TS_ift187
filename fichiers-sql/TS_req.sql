@@ -9,7 +9,7 @@ Responsables : Guillaume.Cleroux@USherbrooke.ca,
                Mathieu.Bouillon@USherbrooke.ca,
                Jonathan.Bouthiette@USherbrooke.ca,
                Leo.Chartrand@USherbrooke.ca
-Version : 1.0.3
+Version : 1.1.3
 Statut : Pret pour la remise
 --############################################################################
 */

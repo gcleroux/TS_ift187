@@ -9,7 +9,7 @@ Responsables : Guillaume.Cleroux@USherbrooke.ca,
                Mathieu.Bouillon@USherbrooke.ca,
                Jonathan.Bouthiette@USherbrooke.ca,
                Leo.Chartrand@USherbrooke.ca
-Version : 1.0.3
+Version : 1.1.3
 Statut : Pret pour la remise
 --############################################################################
 */
@@ -96,7 +96,7 @@ drop table remises_prix_artisans cascade;
 
 drop table remises_prix_films cascade;
 
-drop table sous_titres_films cascade;
+drop table sous_titrages_films cascade;
 
 drop table studios_productions cascade;
 
@@ -111,6 +111,8 @@ drop table productions_films cascade;
  ################################################*/
 
 drop view films_canadiens;
+
+drop view artisans_complet;
 
 -- ################################################
 

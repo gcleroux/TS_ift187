@@ -1,3 +1,19 @@
+/*
+--############################################################################
+Activité : IFT187
+Trimestre : 2020-3
+Composant : TS_req.sql
+Encodage : UTF-8, sans BOM; fin de ligne Unix (LF)
+Plateforme : PostgreSQL 9.4 à 12.4
+Responsables : Guillaume.Cleroux@USherbrooke.ca,
+               Mathieu.Bouillon@USherbrooke.ca,
+               Jonathan.Bouthiette@USherbrooke.ca,
+               Leo.Chartrand@USherbrooke.ca
+Version : 1.1.3
+Statut : Pret pour la remise
+--############################################################################
+*/
+
 /*############################################################################
  un script SQL pour les interfaces MM offertes – vues, routines et déclencheurs (triggers)
  ############################################################################*/
@@ -5,7 +21,7 @@
 
 
 --######################################################################################################################
--- Creation d'une view qui regroupe tous les films canadiens de la bd
+-- Creation d'une view qui regroupe tous les films canadiens de la DB
 ---------------------------------------------------------------------
 CREATE OR REPLACE VIEW films_canadiens(id_film, titre, annee_de_parution, origine) as (
     select f.id_film, f.titre, f.annee_de_parution, pf.localisation
@@ -18,37 +34,15 @@ CREATE OR REPLACE VIEW films_canadiens(id_film, titre, annee_de_parution, origin
 
 
 --######################################################################################################################
--- Automatisme qui ajoute un film a la view des films_canadiens a l'ajout d'un film canadien dans la table productions_films
-----------------------------------------------------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION validation_films_canadiens()
-    returns trigger as
-    $$
-        BEGIN
-            if(
-                select new.localisation
-                from productions_films
-                ) = 'CA'
-                THEN
-                    with merger_film(id_film, titre, annee, origine) as(
-                        select f.id_film, f.titre, f.annee_de_parution, pf.localisation
-                        from productions_films pf
-                        join films f using (id_film)
-                        where id_film = new.id_film and
-                              localisation = new.localisation
-                    )
-                insert into films_canadiens(id_film, titre, annee_de_parution, origine) VALUES
-                (new.id_film, merger_film.titre, merger_film.annee, new.localisation);
-                return new;
-            end if;
+-- Creation d'une view qui regroupe tous les attributs des artisans
+-------------------------------------------------------------------
 
-            return new; -- Si la localisation du nouveau film n'est pas canadien, on fait l'insertion normale
-        end
-    $$
-LANGUAGE plpgsql;
-
-create trigger insertions_films_canadiens
-    before insert
-    on productions_films
-    for each row
-    execute procedure validation_films_canadiens();
+-- Comme les attributs des artisans sont separes lors de la normalisation, nous avons cree une view qui nous permet de
+-- regrouper tous les attributs comme il etait mentionne a la base lors de l'elaboration de notre schema conceptuel
+CREATE OR REPLACE VIEW artisans_complet(id_artisan, prenom, nom, sexe, date_naissance, date_deces) as (
+select a.id_artisan, a.prenom, a.nom, a.sexe, dn.date_naissance, dd.date_deces
+from artisans a
+full join date_naissances dn using (id_artisan) -- On veut toutes les valeurs des tables meme s'il n'y a pas de match dans la jointure
+full join date_deces dd using (id_artisan)      -- On veut toutes les valeurs des tables meme s'il n'y a pas de match dans la jointure
+);
 --######################################################################################################################

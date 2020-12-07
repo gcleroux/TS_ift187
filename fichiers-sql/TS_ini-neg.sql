@@ -9,7 +9,7 @@ Responsables : Guillaume.Cleroux@USherbrooke.ca,
                Mathieu.Bouillon@USherbrooke.ca,
                Jonathan.Bouthiette@USherbrooke.ca,
                Leo.Chartrand@USherbrooke.ca
-Version : 1.0.3
+Version : 1.1.3
 Statut : Pret pour la remise
 --############################################################################
  */
@@ -173,7 +173,7 @@ INSERT INTO Pays_tournages(id_film, id_pays) VALUES
  * Sous-titrage de films
  ####################################################################*/
 
-INSERT INTO SOUS_TITRES_FILMS(id_film, id_langue) VALUES
+INSERT INTO SOUS_TITRAGES_FILMS(id_film, id_langue) VALUES
  (2, 'zz');
 -- Insertion invalide, car la langue ZZ n'existe pas dans la table langues.
 

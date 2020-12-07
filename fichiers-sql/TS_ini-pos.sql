@@ -9,7 +9,7 @@ Responsables : Guillaume.Cleroux@USherbrooke.ca,
                Mathieu.Bouillon@USherbrooke.ca,
                Jonathan.Bouthiette@USherbrooke.ca,
                Leo.Chartrand@USherbrooke.ca
-Version : 1.0.3
+Version : 1.1.3
 Statut : Pret pour la remise
 --############################################################################
 */
@@ -169,45 +169,16 @@ INSERT INTO Emplois(emploi) VALUES
 
 
 --######################################################################################################################
--- Insertions dans la table Genres
-----------------------------------
-INSERT INTO Genres(id_genre) VALUES
- ('Action'),
- ('Animation'),
- ('Aventure'),
- ('Catastrophe'),
- ('Comedie'),
- ('Comedie dramatique'),
- ('Comedie musicale'),
- ('Comedie policiere'),
- ('Comedie romantique'),
- ('Court metrage'),
- ('Dessin anime'),
- ('Documentaire'),
- ('Drame'),
- ('Drame psychologique'),
- ('Epouvante'),
- ('Erotique'),
- ('Espionnage'),
- ('Fantastique'),
- ('Film musical'),
- ('Guerre'),
- ('Historique'),
- ('Horreur'),
- ('Karate'),
- ('Manga'),
- ('Melodrame'),
- ('Muet'),
- ('Policier'),
- ('Politique'),
- ('Romance'),
- ('Science fiction'),
- ('Spectacle'),
- ('Telefilm'),
- ('Theatre'),
- ('Thriller'),
- ('Western'),
- ('Autre');
+-- Insertions dans la table Genres_films
+----------------------------------------
+INSERT INTO genres_films(id_film, id_genre) VALUES
+(1, 'Action'),
+(2, 'Catastrophe'),
+(2, 'Comedie policiere'),
+(3, 'Documentaire'),
+(8, 'Epouvante'),
+(15, 'Thriller'),
+(19, 'Erotique');
 --######################################################################################################################
 
 
@@ -381,9 +352,9 @@ INSERT INTO Pays_tournages(id_film, id_pays) VALUES
 
 
 --######################################################################################################################
--- Insertions dans la table Sous_titres_films
+-- Insertions dans la table SOUS_TITRAGES_FILMS
 ---------------------------------------------
-INSERT INTO SOUS_TITRES_FILMS(id_film, id_langue) VALUES
+INSERT INTO SOUS_TITRAGES_FILMS(id_film, id_langue) VALUES
 (1, 'en'),
 (1, 'fr'),
 (1, 'es'),
@@ -430,8 +401,8 @@ INSERT INTO Participations_films(id_artisan,id_film, id_emploi) VALUES
 -- Insertions dans la table Remises_prix_artisans
 -------------------------------------------------
 INSERT INTO Remises_Prix_Artisans(id_artisan, id_film, id_prix, annee) VALUES
- (1, 1, 19, 2002),
- (1, 1, 21, 2002),
+ (1, 1, 19, 2003),
+ (1, 1, 21, 2003),
  (9, 2, 18, 2002),
  (11, 4, 12, 2002),
  (36, 12, 22, 2002),

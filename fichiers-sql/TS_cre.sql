@@ -9,7 +9,7 @@ Responsables : Guillaume.Cleroux@USherbrooke.ca,
                Mathieu.Bouillon@USherbrooke.ca,
                Jonathan.Bouthiette@USherbrooke.ca,
                Leo.Chartrand@USherbrooke.ca
-Version : 1.0.3
+Version : 1.1.3
 Statut : Pret pour la remise
 --############################################################################
 */
@@ -66,12 +66,13 @@ CREATE DOMAIN Genre
 
 
 -- Les langues sont identifiees par un code de deux lettres en miniscule par convention.
+-- Certaines variations de langues peuvent etre ajoutees. Dans ce cas, nous autorisons d'avoir 2 caracteres supplementaire selon le besoin du client.
 
 CREATE DOMAIN Langue
     VARCHAR(4)
     CONSTRAINT Langue_inv CHECK ( VALUE SIMILAR TO '[a-z]{2}%');
 
-
+-- Nous ne faisons de restrictions sur les carateres du nom. Cependant, nous demandons une chaine d'au moins 1 caractere de long.
 CREATE DOMAIN Nom
     VARCHAR(50)
     CONSTRAINT Nom_inv CHECK ( length(VALUE) > 0 );
@@ -98,7 +99,7 @@ CREATE DOMAIN Sexe
 
 --######################################################################################################################
 
--- L'artisan identifie par "id_artisan", de sexe "sexe", porte le nom "nom" et le prénom "prénom".
+-- L'artisan identifie par "id_artisan", de sexe "sexe", porte le nom "nom" et le prénom "nom".
 
 CREATE TABLE ARTISANS (
   id_artisan BIGSERIAL NOT NULL,
@@ -150,15 +151,6 @@ CREATE TABLE EMPLOIS (
 
   CONSTRAINT EMPLOIS_cc0 PRIMARY KEY (id_emploi),
   CONSTRAINT Emploi_inv CHECK ( length(emploi) > 0 )
-);
-
-
--- Le genre cinematographique identifié par "id_genre".
-
-CREATE TABLE GENRES (
-  id_genre Genre NOT NULL,
-
-  CONSTRAINT GENRES_cc0 PRIMARY KEY (id_genre)
 );
 
 
@@ -255,8 +247,7 @@ CREATE TABLE GENRES_FILMS (
   id_genre Genre NOT NULL ,
 
   CONSTRAINT GENRES_FILMS_cc0 PRIMARY KEY (id_film, id_genre),
-  CONSTRAINT GENRES_FILMS_ce0 FOREIGN KEY (id_film) REFERENCES FILMS(id_film),
-  CONSTRAINT GENRES_FILMS_ce1 FOREIGN KEY (id_genre) REFERENCES GENRES(id_genre)
+  CONSTRAINT GENRES_FILMS_ce0 FOREIGN KEY (id_film) REFERENCES FILMS(id_film)
 );
 
 
@@ -319,13 +310,13 @@ CREATE TABLE REMISES_PRIX_FILMS (
 
 -- Le film identifie "id_film" est sous-titre dans la langue "id_langue".
 
-CREATE TABLE SOUS_TITRES_FILMS (
+CREATE TABLE SOUS_TITRAGES_FILMS (
   id_film BIGINT NOT NULL,
   id_langue Langue NOT NULL,
 
-  CONSTRAINT SOUS_TITRES_FILMS_cc0 PRIMARY KEY (id_film, id_langue),
-  CONSTRAINT SOUS_TITRES_FILMS_ce0 FOREIGN KEY (id_film) REFERENCES FILMS(id_film),
-  CONSTRAINT SOUS_TITRES_FILMS_ce1 FOREIGN KEY (id_langue) REFERENCES LANGUES(id_langue)
+  CONSTRAINT SOUS_TITRAGES_FILMS_cc0 PRIMARY KEY (id_film, id_langue),
+  CONSTRAINT SOUS_TITRAGES_FILMS_ce0 FOREIGN KEY (id_film) REFERENCES FILMS(id_film),
+  CONSTRAINT SOUS_TITRAGES_FILMS_ce1 FOREIGN KEY (id_langue) REFERENCES LANGUES(id_langue)
 );
 
 
