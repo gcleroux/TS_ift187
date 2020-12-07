@@ -4,7 +4,7 @@
  ############################################################################*/
 
 
--- Marche pas
+
 --######################################################################################################################
 -- 1. Quels sont les films réalisés par Sergio Leone et tournés en Espagne (en tout ou en partie)?
 --------------------------------------------------------------------------------------------------
@@ -53,47 +53,36 @@ df.id_langue = 'frqc'
 
 
 
--- Marche pas
+
 --######################################################################################################################
 -- 3. Dans quels films Ingrid Bergman et Marcello Mastroianni ont-ils joué ensemble?
 ------------------------------------------------------------------------------------
-select films.id_film, films.titre
-from films
-join participations_films pf using (id_film)
-
--- On veut que le film ait la participation de Ingrid Bergman
-where exists(
-    select *
-    from participations_films
-    where pf.id_artisan = (
-        select id_artisan
-        from artisans
-        where prenom = 'Ingrid' and
-              nom = 'Bergman'
-        )
+select distinct f.id_film, f.titre
+from participations_films pf
+join participations_films x using (id_film)
+join films f using (id_film)
+where pf.id_artisan = (
+    select a.id_artisan
+    from artisans a
+    where prenom = 'Ingrid' and
+          nom = 'Bergman'
     )
-
--- Et on veut egalement que le film comporte la participation de Marcello Mastroianni
-and exists(
-    select *
-    from participations_films
-    where pf.id_artisan = (
-        select id_artisan
-        from artisans
-        where prenom = 'Marcello' and
-              nom = 'Mastroianni'
-        )
+and x.id_artisan = (
+    select a.id_artisan
+    from artisans a
+    where prenom = 'Marcello' and
+          nom = 'Mastroianni'
     )
 ;
 --######################################################################################################################
 
 
--- Marche pas
+
 --######################################################################################################################
 -- 4. Quels sont les films coproduits par un producteur français et un producteur italien?
 ------------------------------------------------------------------------------------------
-select films.id_film, films.titre
-from films
+select distinct f.id_film, f.titre
+from films f
 join productions_films pf using (id_film)
 
 where exists(
@@ -206,7 +195,7 @@ group by (pf.localisation)
 -- Comme nous ne considerons pas que le Quebec est un pays, nous allons remplacer cette selection par la suivante qui est plus idoine
 -- 9. Quels sont les 10 films canadiens ayant eu le plus d’entrées payantes à leur sortie en salle, au Canada, en France, aux États-Unis?
 
--- Creation d'une view qui regroupe tous les films canadiens de la bd
+-- Creation d'une view qui regroupe tous les films canadiens de la DB
 CREATE OR REPLACE VIEW films_canadiens(id_film, titre, annee_de_parution, origine) as (
     select f.id_film, f.titre, f.annee_de_parution, pf.localisation
     from films f
