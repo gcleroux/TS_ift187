@@ -40,9 +40,19 @@ CREATION DES DOMAINES DE LA DB
 ######################################################################################################################*/
 
 -- Creation des domaines
+
+
+-- Une limite arbitraire de 1850 jusqu'a aujourd'hui est etablie, car on estime qu'aucun film precedent cette date
+-- se retrouvera dans notre base de donnee.
+-- Source: https://www.larousse.fr/encyclopedie/divers/cin%C3%A9ma/33988
+
 CREATE DOMAIN Annee
     INT
     CONSTRAINT Annee_inv CHECK (VALUE BETWEEN 1850 AND extract(YEAR FROM now()));
+
+
+-- Les genres sont etablis afin de representer le plus de genres possibles tout en definissant des genres precis.
+-- Source: https://www.retourverslecinema.com/les-genres-cinematographiques/
 
 CREATE DOMAIN Genre
     VARCHAR(30)
@@ -54,26 +64,41 @@ CREATE DOMAIN Genre
                                            'Politique', 'Romance', 'Science fiction', 'Spectacle', 'Telefilm', 'Theatre',
                                            'Thriller',  'Western', 'Autre'));
 
+
+-- Les langues sont identifiees par un code de deux lettres en miniscule par convention.
+
 CREATE DOMAIN Langue
     VARCHAR(4)
     CONSTRAINT Langue_inv CHECK ( VALUE SIMILAR TO '[a-z]{2}%');
+
 
 CREATE DOMAIN Nom
     VARCHAR(50)
     CONSTRAINT Nom_inv CHECK ( length(VALUE) > 0 );
 
+
+-- Les pays sont identifiees par un code de deux lettres en majuscule par convention.
+
 CREATE DOMAIN Pays
     CHAR(2)
     CONSTRAINT Pays_inv CHECK ( VALUE SIMILAR TO '[A-Z]{2}');
 
+
+-- Les sexes possibles sont masculins, feminins ou inconnu pour un artisan peu connu et dont nous avons
+-- peu d'informations.
+-- Source: https://cihr-irsc.gc.ca/f/48642.html
+
 CREATE DOMAIN Sexe
     CHAR(1)
     CONSTRAINT Sexe_inv CHECK ( VALUE IN ('M', 'F', 'I') );
---######################################################################################################################
-
-
 
 --######################################################################################################################
+
+
+
+--######################################################################################################################
+
+-- L'artisan identifie par "id_artisan", de sexe "sexe", porte le nom "nom" et le prénom "prénom".
 
 CREATE TABLE ARTISANS (
   id_artisan BIGSERIAL NOT NULL,
@@ -84,6 +109,9 @@ CREATE TABLE ARTISANS (
   CONSTRAINT ARTISANS_cc0 PRIMARY KEY (id_artisan)
 );
 
+
+-- Le film identifie par "id_film" porte le titre "titre", est sorti au cours de l'annee "annee_de_parution" et a une duree
+-- de "duree" (en minutes). Aussi, le resume du film "synopsis" et le budget "budget" s'y retrouve.
 
 CREATE TABLE FILMS (
   id_film BIGSERIAL NOT NULL,
@@ -101,6 +129,10 @@ CREATE TABLE FILMS (
 );
 
 
+-- Un pays est identifie par le code "id_pays" et porte le nom français "nom_pays".
+-- Le code à deux lettres est utilise puisque notre db vise les pays majeurs (au lieu des codes à trois lettres).
+-- Par convention, les codes de pays sont en lettres majuscules.
+
 CREATE TABLE PAYS_MONDE (
   id_pays Pays NOT NULL,
   nom_pays VARCHAR(50) NOT NULL,
@@ -109,6 +141,8 @@ CREATE TABLE PAYS_MONDE (
   CONSTRAINT Nom_pays_inv CHECK ( length(nom_pays) > 0 )
 );
 
+
+-- L'emploi identifie par "id_emploi" porte le nom français "emploi".
 
 CREATE TABLE EMPLOIS (
   id_emploi BIGSERIAL NOT NULL,
@@ -119,12 +153,18 @@ CREATE TABLE EMPLOIS (
 );
 
 
+-- Le genre cinematographique identifié par "id_genre".
+
 CREATE TABLE GENRES (
   id_genre Genre NOT NULL,
 
   CONSTRAINT GENRES_cc0 PRIMARY KEY (id_genre)
 );
 
+
+-- La langue identifiee par le code "id_langue" porte le nom français "nom_langue".
+-- Le code à deux lettres est utilise puisque notre db vise les pays majeurs (au lieu des codes à trois lettres).
+-- Contrairement aux pays, par convention, les codes de langue sont en lettres minuscules.
 
 CREATE TABLE LANGUES (
   id_langue Langue NOT NULL,
@@ -134,6 +174,8 @@ CREATE TABLE LANGUES (
   CONSTRAINT Nom_langue_inv CHECK ( length(nom_langue) > 0 )
 );
 
+
+-- Le prix identifie "id_prix" remporte le prix "nom_prix" et est remis a un artisan ou un film "categorie".
 
 CREATE TABLE PRIX (
   id_prix BIGSERIAL NOT NULL,
@@ -146,6 +188,8 @@ CREATE TABLE PRIX (
 );
 
 
+-- L'artisan "id_artisan" est ne le "date_naissance".
+
 CREATE TABLE DATE_NAISSANCES (
     id_artisan BIGINT NOT NULL,
     date_naissance DATE NOT NULL,
@@ -155,6 +199,8 @@ CREATE TABLE DATE_NAISSANCES (
     CONSTRAINT Date_naissance_inv CHECK ( date_naissance <= now()::DATE )
 );
 
+
+-- L'artisan "id_artisan" est decéde le "date_deces".
 
 CREATE TABLE DATE_DECES (
     id_artisan BIGINT NOT NULL,
@@ -166,6 +212,8 @@ CREATE TABLE DATE_DECES (
 );
 
 
+-- Le studio identifie par "id_studio" porte le nom "nom_studio" et est localise à "localisation".
+
 CREATE TABLE STUDIOS_PRODUCTIONS (
   id_studio BIGSERIAL NOT NULL,
   localisation Pays NOT NULL ,
@@ -176,6 +224,8 @@ CREATE TABLE STUDIOS_PRODUCTIONS (
 );
 
 
+-- Le pays identifie par "id_film" est tourne dans le/les pays identifie par "id_pays".
+
 CREATE TABLE PAYS_TOURNAGES (
   id_film BIGINT NOT NULL,
   id_pays Pays NOT NULL,
@@ -184,6 +234,9 @@ CREATE TABLE PAYS_TOURNAGES (
   CONSTRAINT PAYS_TOURNAGES_ce0 FOREIGN KEY (id_film) REFERENCES FILMS(id_film),
   CONSTRAINT PAYS_TOURNAGES_ce1 FOREIGN KEY (id_pays) REFERENCES PAYS_MONDE(id_pays)
 );
+
+
+-- Le pays identifie par "id_film" est presente dans le/les pays identifie par "id_pays".
 
 CREATE TABLE PAYS_PRESENTES (
   id_film BIGINT NOT NULL,
@@ -194,6 +247,9 @@ CREATE TABLE PAYS_PRESENTES (
   CONSTRAINT PAYS_PRESENTES_ce1 FOREIGN KEY (id_pays) REFERENCES PAYS_MONDE(id_pays)
 );
 
+
+-- Le film "id_film" appartient au genre "id_genre"; un film peut appartenir à plus d'une genre.
+
 CREATE TABLE GENRES_FILMS (
   id_film BIGINT NOT NULL ,
   id_genre Genre NOT NULL ,
@@ -202,6 +258,9 @@ CREATE TABLE GENRES_FILMS (
   CONSTRAINT GENRES_FILMS_ce0 FOREIGN KEY (id_film) REFERENCES FILMS(id_film),
   CONSTRAINT GENRES_FILMS_ce1 FOREIGN KEY (id_genre) REFERENCES GENRES(id_genre)
 );
+
+
+-- Le film "id_film" est par par le studio "id_studio" situe dans le pays "localisation".
 
 CREATE TABLE PRODUCTIONS_FILMS (
     id_film BIGINT NOT NULL,
@@ -212,6 +271,9 @@ CREATE TABLE PRODUCTIONS_FILMS (
     CONSTRAINT PARTICIPATIONS_FILMS_ce0 FOREIGN KEY (id_film) REFERENCES FILMS(id_film),
     CONSTRAINT PARTICIPATIONS_FILMS_ce1 FOREIGN KEY (id_studio, localisation) REFERENCES STUDIOS_PRODUCTIONS(id_studio, localisation)
 );
+
+
+-- L'artisan "id_artisan" occupe l'emploi "id_emploi" dans le film "id_film".
 
 CREATE TABLE PARTICIPATIONS_FILMS (
   id_artisan BIGINT NOT NULL,
@@ -224,6 +286,9 @@ CREATE TABLE PARTICIPATIONS_FILMS (
   CONSTRAINT PARTICIPATIONS_FILMS_ce2 FOREIGN KEY (id_emploi) REFERENCES EMPLOIS(id_emploi)
 );
 
+
+-- Le film "id_film" est evalue par l'artisan "id_artisan" qui presente une note "note" et un article "article"
+-- qui s'y rattache.
 
 CREATE TABLE EVALUATIONS_FILMS (
   id_artisan BIGINT NOT NULL,
@@ -239,6 +304,8 @@ CREATE TABLE EVALUATIONS_FILMS (
 );
 
 
+-- Le film "id_film" recoit le prix "id_prix" pour une annee "annee" donnee.
+
 CREATE TABLE REMISES_PRIX_FILMS (
   id_film BIGINT NOT NULL,
   id_prix BIGINT NOT NULL,
@@ -250,6 +317,8 @@ CREATE TABLE REMISES_PRIX_FILMS (
 );
 
 
+-- Le film identifie "id_film" est sous-titre dans la langue "id_langue".
+
 CREATE TABLE SOUS_TITRES_FILMS (
   id_film BIGINT NOT NULL,
   id_langue Langue NOT NULL,
@@ -258,6 +327,10 @@ CREATE TABLE SOUS_TITRES_FILMS (
   CONSTRAINT SOUS_TITRES_FILMS_ce0 FOREIGN KEY (id_film) REFERENCES FILMS(id_film),
   CONSTRAINT SOUS_TITRES_FILMS_ce1 FOREIGN KEY (id_langue) REFERENCES LANGUES(id_langue)
 );
+
+
+-- Pour le film identifie "id_film", l'artisan "artisan_doubleur" double l'artisan "artisan_double"
+-- dans le langue "id_langue.
 
 CREATE TABLE DOUBLAGES_FILMS (
     id_film BIGINT NOT NULL,
@@ -273,6 +346,8 @@ CREATE TABLE DOUBLAGES_FILMS (
 );
 
 
+-- L'artisan "id_artisan" jouant dans le film "id_film" recoit le prix "id_prix" pour une annee "annee" donnee.
+
 CREATE TABLE REMISES_PRIX_ARTISANS (
   id_artisan BIGINT NOT NULL,
   id_film BIGINT NOT NULL,
@@ -286,6 +361,8 @@ CREATE TABLE REMISES_PRIX_ARTISANS (
 );
 
 
+-- Une recette du film "id_film" a l'annee "annee" par l'identifiant "id_pays" est de "revenu" USD.
+
 CREATE TABLE RECETTES (
   id_film BIGINT NOT NULL,
   id_pays Pays NOT NULL,
@@ -297,6 +374,9 @@ CREATE TABLE RECETTES (
   CONSTRAINT REVENUS_FILMS_ce1 FOREIGN KEY (id_pays) REFERENCES PAYS_MONDE(id_pays),
   CONSTRAINT Revenus_inv CHECK ( revenus >= 0 )
 );
+
+
+-- L'artisan "id_artisan" est de nationalité "id_pays"; il peut en cumuler plusieurs.
 
 CREATE TABLE NATIONALITES (
     id_artisan BIGINT NOT NULL,
