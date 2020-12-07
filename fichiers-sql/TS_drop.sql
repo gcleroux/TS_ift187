@@ -2,15 +2,6 @@
  un script SQL pour supprimer les domaines, tables, triggers, etc. de la DB
  ############################################################################*/
 
-/* ####################################################################
- Liste des modifications a faire dans le doc
-
-   - Tenir le fichier a jour avec les additions dans la DB
-
-   ** SI VOUS AJOUTEZ DES VIEWS, TRIGGERS, ETC. N'OUBLIEZ PAS DE METTRE UN SCRIPT ICI POUR LE SUPPRIMER! **
-
- ####################################################################*/
-
 
 
 /*################################################
@@ -93,11 +84,19 @@ drop table sous_titres_films cascade;
 
 drop table studios_productions cascade;
 
+drop table productions_films cascade;
+
 -- ################################################
 
+
+
 /*################################################
-  GESTION DES TRIGGERS DE LA DB
+  GESTION DES VIEWS DE LA DB
  ################################################*/
+
+drop view films_canadiens;
+
+-- ################################################
 
 
 
@@ -128,5 +127,8 @@ drop function validation_recettes_pays();
 
 drop trigger insertions_recettes_annee on recettes;
 drop function validation_recettes_annee();
+
+drop trigger insertions_date_deces on date_deces;
+drop function validation_date_deces();
 
 -- ################################################
