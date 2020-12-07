@@ -5,12 +5,13 @@ Trimestre : 2020-3
 Composant : TS_req.sql
 Encodage : UTF-8, sans BOM; fin de ligne Unix (LF)
 Plateforme : PostgreSQL 9.4 à 12.4
-Responsables : Guillaume.Cleroux@USherbrooke.ca,
-               Mathieu.Bouillon@USherbrooke.ca,
+Responsables : Mathieu.Bouillon@USherbrooke.ca,
                Jonathan.Bouthiette@USherbrooke.ca,
-               Leo.Chartrand@USherbrooke.ca
+               Leo.Chartrand@USherbrooke.ca,
+               Guillaume.Cleroux@USherbrooke.ca
+
 Version : 1.0.3
-Statut : Pret pour la remise
+Statut : Remis
 --############################################################################
 */
 
@@ -405,7 +406,7 @@ INSERT INTO SOUS_TITRES_FILMS(id_film, id_langue) VALUES
 --######################################################################################################################
 -- Insertions dans la table Participations_films
 ------------------------------------------------
-INSERT INTO Participations_films(id_artisan,id_film, id_emploi) VALUES
+INSERT INTO Participations_films(id_artisan, id_film, id_emploi) VALUES
  (1, 1, 6),
  (9, 2, 6),
  (11, 4, 6),
