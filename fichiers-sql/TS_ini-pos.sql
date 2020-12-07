@@ -3,132 +3,10 @@
  ####################################################################### */
 
 
-/* ####################################################################
- Liste des modifications a faire dans le doc
 
-DONE   - Modifier les insertions de genres pour enlever les accents
-DONE   - Refaire les insertions de PRIX. Elles ne suivent pas les restrictions sur la categorie
-   - Verifier la validite de toutes les requetes, notamment la relation entre doublages et participation ne fonctionne pas avec les insertions actuelles
-DONE   - Ajouter les insertions requises pour pouvoir faires les exemples de selection
-DONE   - Ajouter plus d'insertions dans certaines tables
-   - Refaire la mise en page pour separer les insertions et les delimiter
-
-
-   **ASSUREZ VOUS QUE VOUS ENTREZ BIEN LES BONS TYPES DANS VOS INSERTIONS! BEAUCOUP DE INT ETAIT ENTRES COMME DES VARCHAR!**
-   **SI VOUS AJOUTEZ DE NOUVELLES DONNÉES, AJOUTEZ LES À LA FIN D'UNE LISTE SINON ÇA DÉTRUIT TOUTES LES BIGSERIAL**
-
- #################################################################### */
-
-
-/**
- * Emplois
- */
-INSERT INTO Emplois(emploi) VALUES
- ('Producteur'),
- ('Assistant producteur'),
- ('Scenariste'),
- ('Realisateur'),
- ('Assistant realisateur'), --#5
- ('Acteur'),
- ('Monteur'),
- ('Cameraman'),
- ('Preneur de son'),
- ('Chef décorateur'), --#10
- ('Maquilleur'),
- ('Costumier'),
- ('Directeur technique'),
- ('Cascadeur'),
- ('Auteur de doublage'), --#15
- ('Auteur de sous-titrage'),
- ('Doubleur'),
- ('Compositeur');
-
-
-/**
- * Genre
- */
-INSERT INTO Genres(id_genre) VALUES
- ('Action'),
- ('Animation'),
- ('Aventure'),
- ('Catastrophe'),
- ('Comedie'),
- ('Comedie dramatique'),
- ('Comedie musicale'),
- ('Comedie policiere'),
- ('Comedie romantique'),
- ('Court metrage'),
- ('Dessin anime'),
- ('Documentaire'),
- ('Drame'),
- ('Drame psychologique'),
- ('Epouvante'),
- ('Erotique'),
- ('Espionnage'),
- ('Fantastique'),
- ('Film musical'),
- ('Guerre'),
- ('Historique'),
- ('Horreur'),
- ('Karate'),
- ('Manga'),
- ('Melodrame'),
- ('Muet'),
- ('Policier'),
- ('Politique'),
- ('Romance'),
- ('Science fiction'),
- ('Spectacle'),
- ('Telefilm'),
- ('Theatre'),
- ('Thriller'),
- ('Western'),
- ('Autre');
-
-
-/**
- * Studios de productions
- */
-INSERT INTO Studios_Productions(nom_studio, localisation) VALUES
- ('LGM Productions', 'FR'),
- ('Gaumont', 'FR'),
- ('Walt Disney Pictures', 'US'),
- ('Walt Disney Animation', 'US'),
- ('Malposo Productions', 'US'),         --#5
- ('Village Roadshow Pictures', 'US'),
- ('Cinecitta', 'IT'),
- ('Pathé Consortium Cinéma', 'FR'),
- ('Universal', 'US'),
- ('United Artists', 'US'),          --#10
- ('Pathe', 'FR'),
- ('Loews Incorporated', 'US'),
- ('Warner Bros. Pictures', 'US'),
- ('Paramount Pictures', 'US'),
- ('20th Century Fox Film Corporation', 'US'),   --#15
- ('RKO Radio Pictures', 'US'),
- ('Columbia Pictures', 'US'),
- ('Metro-Goldwyn-Mayer', 'US'),
- ('New Line Cinema', 'US'),
- ('Miramax Films', 'US'),   --#20
- ('Lionsgate Films', 'US'),
- ('Touchstone Pictures', 'US'),
- ('Marvel Entertainment Group', 'US'),
- ('Regency Enterprises', 'US'),
- ('Alcon Entertainment', 'US'),   --#25
- ('DMG Entertainment', 'US'),
- ('DC Comics', 'US'),
- ('Syncopy', 'US'),
- ('River Road Entertainment', 'US'),
- ('La casa de pelicula de Papel', 'ES'),   --#30
- ('Barunson E&A', 'KR'),
- ('Fuji Television', 'JP'),
- ('Park Ex Pictures', 'CA'),
- ('Les Productions La Fete', 'CA');
-
-
-/**
- * Artisans
- */
+--######################################################################################################################
+-- Insertions dans la table Artisans
+------------------------------------
  INSERT INTO Artisans (prenom, nom, sexe) VALUES
  ('Johnny', 'Depp', 'M'),
  ('Orlando','Bloom','M'),
@@ -174,63 +52,13 @@ INSERT INTO Studios_Productions(nom_studio, localisation) VALUES
  ('Jean-Marie', 'Moncelet', 'M'),
  ('Jo','Critique','M'),
  ('Georgette', 'La-Lichette', 'F');
+--######################################################################################################################
 
 
-/*
- * Date de naissance
- */
-INSERT INTO Date_naissances(id_artisan, date_naissance) VALUES
- (1, '1963-06-09'),
- (2, '1977-01-13'),
- (3, '1985-03-26'),
- (4, '1973-03-01'),
- (5, '1971-02-25'),
- (6, '1964-04-20'),
- (7, '1939-05-25'),
- (8, '1958-10-20'),
- (9, '1981-01-28'),
- (10, '1982-05-03'),
- (11, '1968-10-12'),
- (12, '1974-01-30'),
- (13, '1933-03-14'),
- (14, '1940-07-13'),
- (15, '1971-10-29'),
- (16, '1976-05-25'),
- (17, '1937-06-01'),
- (18, '1979-04-04'),
- (19, '1980-12-19'),
- (20, '1917-05-07'),
- (21, '1907-05-26'),
- (22, '1916-04-05'),
- (23, '1935-03-01'),
- (24, '1914-07-31'),
- (25, '1889-04-16'),
- (26, '1904-01-18'),
- (27, '1980-11-12'),
- (28, '1965-11-02'),
- (29, '1909-06-20'),
- (30, '1916-12-09');
 
-
-/*
- * Date de décès
- */
-INSERT INTO Date_deces(id_artisan, date_deces) VALUES
- (18, '2008-01-22'),
- (20, '2000-06-24'),
- (21, '1979-06-11'),
- (22, '2003-06-12'),
- (23, '2020-02-08'),
- (24, '1983-01-27'),
- (25, '1977-12-25'),
- (26, '1986-11-29'),
- (29, '1959-10-14'),
- (30, '2020-02-05');
-
-
-/**
- * Films
- */
+--######################################################################################################################
+-- Insertions dans la table Films
+---------------------------------
 INSERT INTO Films(titre, annee_de_parution, duree, synopsis, budget) VALUES
   ('Pirates of the Caribbean: The Curse of the Black Pearl', 2003, 143, 'Le film se termine avec Jack regardant son compas et chantant A Pirate''s Life for Me.', 140000000),
   ('The Lord of The Rings: The FellowShip of the Ring', 2001, 178, 'La Communaute de l''anneau se dissout.', 93000000),
@@ -251,11 +79,126 @@ INSERT INTO Films(titre, annee_de_parution, duree, synopsis, budget) VALUES
   ('La fille a un million de dollars', 2004, 132, 'Frankie dirige une petite salle de boxe régionale avec son meilleur ami', 30000000),
   ('Bon Cop, Bad Cop', 2006, 116, 'Un Québecois et un Ontarien font équipe pour arrêter un tueur en série', 8000000),
   ('La Guerres des tuques', 1984, 92, 'C''est le congé des Fêtes qui commence', 1340000);
+--######################################################################################################################
 
 
-/**
-  *Prix
- */
+
+--######################################################################################################################
+-- Insertions dans la table PAYS_MONDE
+--------------------------------------
+
+-- Pour inserer les pays, on prend les donnees d'un fichier csv qui est fourni dans la documentation
+COPY PAYS_MONDE
+FROM '~/projet_ift187/fichiers-csv/pays.csv'
+WITH (HEADER, FORMAT CSV, DELIMITER ',');
+
+/*
+Insertions a partir de psql
+---------------------------
+\copy pays_monde from '~/projet_ift187/fichiers-csv/pays.csv' with delimiter ',' header csv;
+*/
+--######################################################################################################################
+
+
+
+--######################################################################################################################
+-- Insertions dans la table LANGUES
+-----------------------------------
+
+-- Pour inserer les pays, on prend les donnees d'un fichier csv qui est fourni dans la documentation
+COPY LANGUES
+FROM '~/projet_ift187/fichiers-csv/langues.csv'
+WITH (HEADER, FORMAT CSV, DELIMITER ',');
+
+/*
+Insertions a partir de psql
+---------------------------
+\copy langues from '~/projet_ift187/fichiers-csv/langues.csv' with delimiter ',' header csv;
+*/
+
+-- Plusieurs verietes linguistiques peuvent etre ajoutees a la table de langues selon le besoin, nous en avons mis quelques unes pour fin de demonstration
+INSERT INTO langues(id_langue, nom_langue) VALUES
+('frqc', 'Francais Quebecois'),
+('freu', 'Francais europeen'),
+('enuk', 'Anglais Britannique'),
+('enus', 'Anglais americain');
+--######################################################################################################################
+
+
+
+--######################################################################################################################
+-- Insertions dans la table Emplois
+-----------------------------------
+INSERT INTO Emplois(emploi) VALUES
+ ('Producteur'),
+ ('Assistant producteur'),
+ ('Scenariste'),
+ ('Realisateur'),
+ ('Assistant realisateur'), --#5
+ ('Acteur'),
+ ('Monteur'),
+ ('Cameraman'),
+ ('Preneur de son'),
+ ('Chef décorateur'), --#10
+ ('Maquilleur'),
+ ('Costumier'),
+ ('Directeur technique'),
+ ('Cascadeur'),
+ ('Auteur de doublage'), --#15
+ ('Auteur de sous-titrage'),
+ ('Doubleur'),
+ ('Compositeur');
+--######################################################################################################################
+
+
+
+--######################################################################################################################
+-- Insertions dans la table Genres
+----------------------------------
+INSERT INTO Genres(id_genre) VALUES
+ ('Action'),
+ ('Animation'),
+ ('Aventure'),
+ ('Catastrophe'),
+ ('Comedie'),
+ ('Comedie dramatique'),
+ ('Comedie musicale'),
+ ('Comedie policiere'),
+ ('Comedie romantique'),
+ ('Court metrage'),
+ ('Dessin anime'),
+ ('Documentaire'),
+ ('Drame'),
+ ('Drame psychologique'),
+ ('Epouvante'),
+ ('Erotique'),
+ ('Espionnage'),
+ ('Fantastique'),
+ ('Film musical'),
+ ('Guerre'),
+ ('Historique'),
+ ('Horreur'),
+ ('Karate'),
+ ('Manga'),
+ ('Melodrame'),
+ ('Muet'),
+ ('Policier'),
+ ('Politique'),
+ ('Romance'),
+ ('Science fiction'),
+ ('Spectacle'),
+ ('Telefilm'),
+ ('Theatre'),
+ ('Thriller'),
+ ('Western'),
+ ('Autre');
+--######################################################################################################################
+
+
+
+--######################################################################################################################
+-- Insertions dans la table Prix
+--------------------------------
 INSERT INTO Prix(nom_prix, categorie) VALUES
  ('Oscars du cinema - Meilleure musique de film', 'Artisan'),
  ('Oscars du cinema - Meilleure photographie', 'Artisan'),
@@ -290,23 +233,111 @@ INSERT INTO Prix(nom_prix, categorie) VALUES
  ('Prix Nebula - Meilleur script', 'Artisan'),
  ('Festival de Cannes - Interpretation masculine', 'Artisan'),
  ('Festival de Cannes - Palmes d''or', 'Film');
+--######################################################################################################################
 
 
-/**
-  *RemisesPrixArtisans
- */
-INSERT INTO Remises_Prix_Artisans(id_artisan, id_film, id_prix, annee) VALUES
- (2, 2, 19, 2002),
- (2, 2, 21, 2002),
- (9, 2, 18, 2002),
- (7, 2, 12, 2002),
- (7, 2, 22, 2002),
- (36, 13, 32, 1970);
+
+--######################################################################################################################
+-- Insertions dans la table Studios_productions
+-----------------------------------------------
+INSERT INTO Studios_Productions(nom_studio, localisation) VALUES
+ ('LGM Productions', 'FR'),
+ ('Gaumont', 'FR'),
+ ('Walt Disney Pictures', 'US'),
+ ('Walt Disney Animation', 'US'),
+ ('Malposo Productions', 'US'),         --#5
+ ('Village Roadshow Pictures', 'US'),
+ ('Cinecitta', 'IT'),
+ ('Pathé Consortium Cinéma', 'FR'),
+ ('Universal', 'US'),
+ ('United Artists', 'US'),          --#10
+ ('Pathe', 'FR'),
+ ('Loews Incorporated', 'US'),
+ ('Warner Bros. Pictures', 'US'),
+ ('Paramount Pictures', 'US'),
+ ('20th Century Fox Film Corporation', 'US'),   --#15
+ ('RKO Radio Pictures', 'US'),
+ ('Columbia Pictures', 'US'),
+ ('Metro-Goldwyn-Mayer', 'US'),
+ ('New Line Cinema', 'US'),
+ ('Miramax Films', 'US'),   --#20
+ ('Lionsgate Films', 'US'),
+ ('Touchstone Pictures', 'US'),
+ ('Marvel Entertainment Group', 'US'),
+ ('Regency Enterprises', 'US'),
+ ('Alcon Entertainment', 'US'),   --#25
+ ('DMG Entertainment', 'US'),
+ ('DC Comics', 'US'),
+ ('Syncopy', 'US'),
+ ('River Road Entertainment', 'US'),
+ ('La casa de pelicula de Papel', 'ES'),   --#30
+ ('Barunson E&A', 'KR'),
+ ('Fuji Television', 'JP'),
+ ('Park Ex Pictures', 'CA'),
+ ('Les Productions La Fete', 'CA');
+--######################################################################################################################
 
 
-/**
-  *RemisesPrixFilms
- */
+
+--######################################################################################################################
+-- Insertions dans la table Date_naissance
+------------------------------------------
+INSERT INTO Date_naissances(id_artisan, date_naissance) VALUES
+ (1, '1963-06-09'),
+ (2, '1977-01-13'),
+ (3, '1985-03-26'),
+ (4, '1973-03-01'),
+ (5, '1971-02-25'),
+ (6, '1964-04-20'),
+ (7, '1939-05-25'),
+ (8, '1958-10-20'),
+ (9, '1981-01-28'),
+ (10, '1982-05-03'),
+ (11, '1968-10-12'),
+ (12, '1974-01-30'),
+ (13, '1933-03-14'),
+ (14, '1940-07-13'),
+ (15, '1971-10-29'),
+ (16, '1976-05-25'),
+ (17, '1937-06-01'),
+ (18, '1979-04-04'),
+ (19, '1980-12-19'),
+ (20, '1917-05-07'),
+ (21, '1907-05-26'),
+ (22, '1916-04-05'),
+ (23, '1935-03-01'),
+ (24, '1914-07-31'),
+ (25, '1889-04-16'),
+ (26, '1904-01-18'),
+ (27, '1980-11-12'),
+ (28, '1965-11-02'),
+ (29, '1909-06-20'),
+ (30, '1916-12-09');
+--######################################################################################################################
+
+
+
+--######################################################################################################################
+-- Insertions dans la table Date_deces
+--------------------------------------
+INSERT INTO Date_deces(id_artisan, date_deces) VALUES
+ (18, '2008-01-22'),
+ (20, '2000-06-24'),
+ (21, '1979-06-11'),
+ (22, '2003-06-12'),
+ (23, '2020-02-08'),
+ (24, '1983-01-27'),
+ (25, '1977-12-25'),
+ (26, '1986-11-29'),
+ (29, '1959-10-14'),
+ (30, '2020-02-05');
+--######################################################################################################################
+
+
+
+--######################################################################################################################
+-- Insertions dans la table Remises_prix_films
+----------------------------------------------
 INSERT INTO Remises_Prix_Films(id_film, id_prix, annee) VALUES
  (2, 6, 2002),
  (2, 10, 2002),
@@ -316,23 +347,26 @@ INSERT INTO Remises_Prix_Films(id_film, id_prix, annee) VALUES
  (2, 20, 2002),
  (15, 33, 2019),
  (16, 33, 2018);
+--######################################################################################################################
 
 
 
-/**
-  *Pays tournages
- */
+--######################################################################################################################
+-- Insertions dans la table Pays_tournages
+------------------------------------------
 INSERT INTO Pays_tournages(id_film, id_pays) VALUES
  (4, 'CA'),
  (2, 'NZ'),
  (1, 'VE'),
  (1, 'DO'),
- (11, 'IT');
+ (11, 'ES');
+--######################################################################################################################
 
 
-/**
-  *Sous-titrages de films
- */
+
+--######################################################################################################################
+-- Insertions dans la table Sous_titres_films
+---------------------------------------------
 INSERT INTO SOUS_TITRES_FILMS(id_film, id_langue) VALUES
 (1, 'en'),
 (1, 'fr'),
@@ -348,12 +382,13 @@ INSERT INTO SOUS_TITRES_FILMS(id_film, id_langue) VALUES
 (3, 'es'),
 (3, 'de'),
 (3, 'it');
+--######################################################################################################################
 
 
 
-/**
-  *Participation film
- */
+--######################################################################################################################
+-- Insertions dans la table Participations_films
+------------------------------------------------
 INSERT INTO Participations_films(id_artisan,id_film, id_emploi) VALUES
  (1, 1, 6),
  (9, 2, 6),
@@ -371,20 +406,39 @@ INSERT INTO Participations_films(id_artisan,id_film, id_emploi) VALUES
  (40, 4, 6),
  (41, 4, 17),
  (42, 4, 17);
+--######################################################################################################################
 
 
-/**
-  *Doublage de films
- */
+
+--######################################################################################################################
+-- Insertions dans la table Remises_prix_artisans
+-------------------------------------------------
+INSERT INTO Remises_Prix_Artisans(id_artisan, id_film, id_prix, annee) VALUES
+ (1, 1, 19, 2002),
+ (1, 1, 21, 2002),
+ (9, 2, 18, 2002),
+ (11, 4, 12, 2002),
+ (36, 12, 22, 2002),
+ (36, 13, 32, 1970);
+--######################################################################################################################
+
+
+
+--######################################################################################################################
+-- Insertions dans la table Doublage_films
+------------------------------------------
 INSERT INTO DOUBLAGES_FILMS(id_film, artisan_doubleur, artisan_double, id_langue) VALUES
  (4, 41, 40, 'fr'),
  (4, 42, 40, 'frqc'),
  (17, 41, 40, 'fr'),
  (17, 42, 40, 'frqc');
+--######################################################################################################################
 
-/**
-  *Nationalités
- */
+
+
+--######################################################################################################################
+-- Insertions dans la table Nationalites
+----------------------------------------
 INSERT INTO Nationalites(id_artisan, id_pays) VALUES
  (1, 'US'),
  (2, 'GB'),
@@ -400,11 +454,13 @@ INSERT INTO Nationalites(id_artisan, id_pays) VALUES
  (37, 'FR'),
  (38, 'IT'),
  (39, 'PL');
+--######################################################################################################################
 
 
-/**
-  *Pays présentés
- */
+
+--######################################################################################################################
+-- Insertions dans la table Pays_presentes
+------------------------------------------
 INSERT INTO PAYS_PRESENTES(id_film, id_pays) VALUES
 (2, 'US'),
 (2, 'GB'),
@@ -414,11 +470,13 @@ INSERT INTO PAYS_PRESENTES(id_film, id_pays) VALUES
 (18, 'US'),
 (19, 'CA'),
 (19, 'US');
+--######################################################################################################################
 
 
-/**
-  *Recettes
- */
+
+--######################################################################################################################
+-- Insertions dans la table Recettes
+------------------------------------
 INSERT INTO Recettes(id_film, id_pays, annee, revenus) VALUES
  (2, 'GB', 2001, 90228837),
  (18, 'CA', 2006, 50000000),
@@ -426,10 +484,13 @@ INSERT INTO Recettes(id_film, id_pays, annee, revenus) VALUES
  (18, 'US', 2006, 40000000),
  (19, 'CA', 1984, 9000000),
  (19, 'US', 1984, 0);
+--######################################################################################################################
 
-/**
-  *Evaluation des films
- */
+
+
+--######################################################################################################################
+-- Insertions dans la table Evaluations_films
+---------------------------------------------
 INSERT INTO Evaluations_films(id_artisan, id_film, note, article) VALUES
  (31, 2, 75, 'We invest Hobbits with qualities that cannot be visualized. In my mind, they are good-hearted, bustling, chatty little creatures who live in twee houses or burrows, and dress like the merry men of Robin Hood--in smaller sizes, of course. They eat seven or eight times a day, like to take naps, have never been far from home and have eyes that grow wide at the sounds of the night. They are like children grown up or grown old, and when they rise to an occasion, it takes true heroism, for they are timid by nature and would rather avoid a fight.
 Such notions about Hobbits can be found in "Lord of the Rings: The Fellowship of the Ring," but the Hobbits themselves have been pushed off center stage. If the books are about brave little creatures who enlist powerful men and wizards to help them in a dangerous crusade, the movie is about powerful men and wizards who embark on a dangerous crusade, and take along the Hobbits. That is not true of every scene or episode, but by the end "Fellowship" adds up to more of a sword and sorcery epic than a realization of the more naive and guileless vision of J. R. R. Tolkien.
@@ -443,11 +504,13 @@ Jackson has used modern special effects to great purpose in several shots, espec
 That "Fellowship of the Ring" doesn''t match my imaginary vision of Middle-earth is my problem, not yours. Perhaps it will look exactly as you think it should. But some may regret that the Hobbits have been pushed out of the foreground and reduced to supporting characters. And the movie depends on action scenes much more than Tolkien did. In a statement last week, Tolkien''s son Christopher, who is the "literary protector" of his father''s works, said, "My own position is that ''The Lord of the Rings'' is peculiarly unsuitable to transformation into visual dramatic form." That is probably true, and Jackson, instead of transforming it, has transmuted it, into a sword-and-sorcery epic in the modern style, containing many of the same characters and incidents.'),
  (43, 15, 100, 'Ça mérite une palmes d''or ce film là!'),
  (44, 15, 99, 'Good, but could have been better.');
+--######################################################################################################################
 
 
-/**
-  *Productions_films
- */
+
+--######################################################################################################################
+-- Insertions dans la table Productions_films
+---------------------------------------------
 INSERT INTO Productions_films(id_film, id_studio, localisation) VALUES
 (1, 3,'US'),
 (2, 19,'US'),
@@ -457,6 +520,8 @@ INSERT INTO Productions_films(id_film, id_studio, localisation) VALUES
 (4, 23,'US'),
 (5, 17,'US'),
 (5, 24,'US'),
+(6, 1, 'FR'),
+(6, 7, 'IT'),
 (6, 15,'US'),
 (7, 25,'US'),
 (7, 26,'US'),
@@ -470,35 +535,5 @@ INSERT INTO Productions_films(id_film, id_studio, localisation) VALUES
 (18, 33,'CA'),
 (19, 34,'CA'),
 (16, 32, 'JP');
+--######################################################################################################################
 
-
-/**
-  *Pays_monde
- */
--- Pour inserer les pays, on prend les donnees d'un fichier csv qui est fourni dans la documentation
-COPY PAYS_MONDE
-FROM '~/projet_ift187/fichiers-csv/pays.csv'
-WITH (HEADER, FORMAT CSV, DELIMITER ',');
-
-/*
-Insertions a partir de psql
----------------------------
-\copy pays_monde from '~/projet_ift187/fichiers-csv/pays.csv' with delimiter ',' header csv;
-*/
-
-
-/**
- *Langues
- */
--- Pour inserer les pays, on prend les donnees d'un fichier csv qui est fourni dans la documentation
-COPY LANGUES
-FROM '~/projet_ift187/fichiers-csv/langues.csv'
-WITH (HEADER, FORMAT CSV, DELIMITER ',');
-
-insert into langues(id_langue, nom_langue) VALUES ('frqc', 'Francais Quebecois');
-
-/*
-Insertions a partir de psql
----------------------------
-\copy langues from '~/projet_ift187/fichiers-csv/langues.csv' with delimiter ',' header csv;
-*/
