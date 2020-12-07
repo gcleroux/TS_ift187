@@ -56,10 +56,11 @@ and pt.id_pays = 'ES'
 select distinct films.id_film, films.titre  -- On veut que les films apparaissent seulement une fois chaque
 from films
 join productions_films pf using (id_film)
+join studios_productions sp using (id_studio)
 join doublages_films df using (id_film)
 
 -- Selection du pays de production.
-where pf.localisation = 'US' and
+where sp.localisation = 'US' and
 
 -- Selection de la langue en francais quebecois
 df.id_langue = 'frqc'
@@ -107,6 +108,7 @@ join productions_films pf using (id_film)
 where exists(
     select *
     from productions_films
+    join studios_productions sp using (id_studio)
     where localisation = 'FR' and
           productions_films.id_film = pf.id_film
     )
@@ -115,6 +117,7 @@ where exists(
 and exists(
     select *
     from productions_films
+    join studios_productions sp using (id_studio)
     where localisation = 'IT' and
           productions_films.id_film = pf.id_film
     )
@@ -198,16 +201,17 @@ and pf.id_emploi = (
 --######################################################################################################################
 -- 8. Quelle est la distribution par pays des Palmes d’or au Festival de Cannes?
 --------------------------------------------------------------------------------
-select pf.localisation, count(*) as nb_total_de_palmes_dor
+select sp.localisation, count(*) as nb_total_de_palmes_dor
 from remises_prix_films rpf
 join productions_films pf using (id_film)
+join studios_productions sp using (id_studio)
 join prix p using (id_prix)
 
 -- Le prix doit etre la palme d'or de Cannes
 where p.nom_prix ilike '%Festival de Cannes%Palmes d''or%'
 
 -- On regroupe les films selon leur origine
-group by (pf.localisation)
+group by (sp.localisation)
 ;
 --######################################################################################################################
 
@@ -222,10 +226,11 @@ group by (pf.localisation)
 
 -- Creation d'une view qui regroupe tous les films canadiens de la DB
 CREATE OR REPLACE VIEW films_canadiens(id_film, titre, annee_de_parution, origine) as (
-    select f.id_film, f.titre, f.annee_de_parution, pf.localisation
+    select f.id_film, f.titre, f.annee_de_parution, sp.localisation
     from films f
     join productions_films pf using (id_film)
-    where pf.localisation = 'CA' -- Le film est canadien
+    join studios_productions sp using (id_studio)
+    where sp.localisation = 'CA' -- Le film est canadien
 );
 
 -- Les films canadiens qui ont eu le plus de revenus dans leur annee de sortie au Canada

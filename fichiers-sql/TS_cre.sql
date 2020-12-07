@@ -20,7 +20,6 @@ Statut : Pret pour la remise
 
 
 
-drop schema public cascade ;
 /*######################################################################################################################
 CREATION DE LA DB
 ######################################################################################################################*/
@@ -97,7 +96,9 @@ CREATE DOMAIN Sexe
 
 
 
---######################################################################################################################
+/*######################################################################################################################
+CREATION DES TABLES DE LA DB
+######################################################################################################################*/
 
 -- L'artisan identifie par "id_artisan", de sexe "sexe", porte le nom "nom" et le prénom "nom".
 
@@ -116,7 +117,7 @@ CREATE TABLE ARTISANS (
 
 CREATE TABLE FILMS (
   id_film BIGSERIAL NOT NULL,
-  titre TEXT NOT NULL,
+  titre TEXT UNIQUE NOT NULL,
   annee_de_parution Annee NOT NULL,
   duree INT NOT NULL,
   synopsis TEXT NOT NULL,
@@ -136,7 +137,7 @@ CREATE TABLE FILMS (
 
 CREATE TABLE PAYS_MONDE (
   id_pays Pays NOT NULL,
-  nom_pays VARCHAR(50) NOT NULL,
+  nom_pays VARCHAR(50) UNIQUE NOT NULL,
 
   CONSTRAINT PAYS_cc0 PRIMARY KEY (id_pays),
   CONSTRAINT Nom_pays_inv CHECK ( length(nom_pays) > 0 )
@@ -147,7 +148,7 @@ CREATE TABLE PAYS_MONDE (
 
 CREATE TABLE EMPLOIS (
   id_emploi BIGSERIAL NOT NULL,
-  emploi VARCHAR(50) NOT NULL,
+  emploi VARCHAR(50) UNIQUE NOT NULL,
 
   CONSTRAINT EMPLOIS_cc0 PRIMARY KEY (id_emploi),
   CONSTRAINT Emploi_inv CHECK ( length(emploi) > 0 )
@@ -160,7 +161,7 @@ CREATE TABLE EMPLOIS (
 
 CREATE TABLE LANGUES (
   id_langue Langue NOT NULL,
-  nom_langue VARCHAR(60) NOT NULL,
+  nom_langue VARCHAR(60) UNIQUE NOT NULL,
 
   CONSTRAINT LANGUES_cc0 PRIMARY KEY (id_langue),
   CONSTRAINT Nom_langue_inv CHECK ( length(nom_langue) > 0 )
@@ -171,7 +172,7 @@ CREATE TABLE LANGUES (
 
 CREATE TABLE PRIX (
   id_prix BIGSERIAL NOT NULL,
-  nom_prix TEXT NOT NULL,
+  nom_prix TEXT UNIQUE NOT NULL,
   categorie VARCHAR(7) NOT NULL,
 
   CONSTRAINT PRIX_cc0 PRIMARY KEY (id_prix),
@@ -182,12 +183,12 @@ CREATE TABLE PRIX (
 
 -- L'artisan "id_artisan" est ne le "date_naissance".
 
-CREATE TABLE DATE_NAISSANCES (
+CREATE TABLE DATES_NAISSANCE (
     id_artisan BIGINT NOT NULL,
     date_naissance DATE NOT NULL,
 
-    CONSTRAINT DATE_NAISSANCES_cc0 PRIMARY KEY (id_artisan),
-    CONSTRAINT DATE_NAISSANCES_ce0 FOREIGN KEY (id_artisan) REFERENCES ARTISANS(id_artisan),
+    CONSTRAINT DATES_NAISSANCE_cc0 PRIMARY KEY (id_artisan),
+    CONSTRAINT DATES_NAISSANCE_ce0 FOREIGN KEY (id_artisan) REFERENCES ARTISANS(id_artisan),
     CONSTRAINT Date_naissance_inv CHECK ( date_naissance <= now()::DATE )
 );
 
@@ -207,9 +208,9 @@ CREATE TABLE DATE_DECES (
 -- Le studio identifie par "id_studio" porte le nom "nom_studio" et est localise à "localisation".
 
 CREATE TABLE STUDIOS_PRODUCTIONS (
-  id_studio BIGSERIAL NOT NULL,
+  id_studio BIGSERIAL UNIQUE NOT NULL,
   localisation Pays NOT NULL ,
-  nom_studio TEXT NOT NULL,
+  nom_studio TEXT UNIQUE NOT NULL,
 
   CONSTRAINT STUDIOS_PRODUCTIONS_cc0 PRIMARY KEY (id_studio, localisation),
   CONSTRAINT STUDIOS_PRODUCTIONS_ce0 FOREIGN KEY (localisation) REFERENCES PAYS_MONDE(id_pays)
@@ -256,11 +257,10 @@ CREATE TABLE GENRES_FILMS (
 CREATE TABLE PRODUCTIONS_FILMS (
     id_film BIGINT NOT NULL,
     id_studio BIGINT NOT NULL,
-    localisation Pays NOT NULL,
 
-    CONSTRAINT PRODUCTIONS_FILMS_cc0 PRIMARY KEY (id_film, id_studio, localisation),
+    CONSTRAINT PRODUCTIONS_FILMS_cc0 PRIMARY KEY (id_film, id_studio),
     CONSTRAINT PARTICIPATIONS_FILMS_ce0 FOREIGN KEY (id_film) REFERENCES FILMS(id_film),
-    CONSTRAINT PARTICIPATIONS_FILMS_ce1 FOREIGN KEY (id_studio, localisation) REFERENCES STUDIOS_PRODUCTIONS(id_studio, localisation)
+    CONSTRAINT PARTICIPATIONS_FILMS_ce1 FOREIGN KEY (id_studio) REFERENCES STUDIOS_PRODUCTIONS(id_studio)
 );
 
 
@@ -345,7 +345,7 @@ CREATE TABLE REMISES_PRIX_ARTISANS (
   id_prix BIGINT NOT NULL,
   annee Annee NOT NULL,
 
-  CONSTRAINT REMISES_PRIX_ARTISANS_cc0 PRIMARY KEY (id_artisan, id_film, id_prix, annee),
+  CONSTRAINT REMISES_PRIX_ARTISANS_cc0 PRIMARY KEY (id_artisan, id_film, id_prix),
   CONSTRAINT REMISES_PRIX_ARTISANS_ce0 FOREIGN KEY (id_artisan) REFERENCES ARTISANS(id_artisan),
   CONSTRAINT REMISES_PRIX_ARTISANS_ce1 FOREIGN KEY (id_film) REFERENCES FILMS(id_film),
   CONSTRAINT REMISES_PRIX_ARTISANS_ce2 FOREIGN KEY (id_prix) REFERENCES PRIX(id_prix)
@@ -377,3 +377,5 @@ CREATE TABLE NATIONALITES (
     CONSTRAINT NATIONALITES_ce0 FOREIGN KEY (id_artisan) REFERENCES ARTISANS(id_artisan),
     CONSTRAINT NATIONALITES_ce1 FOREIGN KEY (id_pays) REFERENCES PAYS_MONDE(id_pays)
 );
+
+--######################################################################################################################

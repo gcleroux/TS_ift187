@@ -269,7 +269,7 @@ INSERT INTO Studios_Productions(nom_studio, localisation) VALUES
 --######################################################################################################################
 -- Insertions dans la table Date_naissance
 ------------------------------------------
-INSERT INTO Date_naissances(id_artisan, date_naissance) VALUES
+INSERT INTO DATES_NAISSANCE(id_artisan, date_naissance) VALUES
  (1, '1963-06-09'),
  (2, '1977-01-13'),
  (3, '1985-03-26'),
@@ -498,29 +498,29 @@ That "Fellowship of the Ring" doesn''t match my imaginary vision of Middle-earth
 --######################################################################################################################
 -- Insertions dans la table Productions_films
 ---------------------------------------------
-INSERT INTO Productions_films(id_film, id_studio, localisation) VALUES
-(1, 3,'US'),
-(2, 19,'US'),
-(3, 22,'US'),
-(3, 13,'US'),
-(3, 28,'US'),
-(4, 23,'US'),
-(5, 17,'US'),
-(5, 24,'US'),
-(6, 1, 'FR'),
-(6, 7, 'IT'),
-(6, 15,'US'),
-(7, 25,'US'),
-(7, 26,'US'),
-(8, 13,'US'),
-(8, 27,'US'),
-(8, 28,'US'),
-(9, 25,'US'),
-(10, 29,'US'),
-(11, 30,'ES'),
-(15, 31,'KR'),
-(18, 33,'CA'),
-(19, 34,'CA'),
-(16, 32, 'JP');
+INSERT INTO Productions_films(id_film, id_studio) VALUES
+(1, 3),
+(2, 19),
+(3, 22),
+(3, 13),
+(3, 28),
+(4, 23),
+(5, 17),
+(5, 24),
+(6, 1),
+(6, 7),
+(6, 15),
+(7, 25),
+(7, 26),
+(8, 13),
+(8, 27),
+(8, 28),
+(9, 25),
+(10, 29),
+(11, 30),
+(15, 31),
+(18, 33),
+(19, 34),
+(16, 32);
 --######################################################################################################################
 

@@ -35,20 +35,6 @@ INSERT INTO Emplois(emploi) VALUES
 
 
 /* ###################################################################
- * Genre
- ####################################################################*/
-
-INSERT INTO Genres(id_genre) VALUES
- ('Film');
--- Insertion invalide, car Film ne fait pas partie de la liste autorisee du domaine.
-
-INSERT INTO Genres(id_genre) VALUES
- ('Film peplum autobiographique de science-fiction');
--- Insertion invalide, car le nombre de lettres depasse la limite de varchar(30).
-
-
-
-/* ###################################################################
  * Studios de production
  ####################################################################*/
 
@@ -76,7 +62,7 @@ INSERT INTO Artisans (prenom, nom, sexe) VALUES
  * Date de naissance
  ####################################################################*/
 
-INSERT INTO Date_naissances(id_artisan, date_naissance) VALUES
+INSERT INTO DATES_NAISSANCE(id_artisan, date_naissance) VALUES
  (1, '1800-01-01');
 -- Insertion invalide, car la date precede la limite etablie de annee de 1850.
 

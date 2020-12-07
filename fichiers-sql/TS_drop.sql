@@ -62,7 +62,7 @@ drop table artisans cascade;
 
 drop table date_deces cascade;
 
-drop table date_naissances cascade;
+drop table DATES_NAISSANCE cascade;
 
 drop table doublages_films cascade;
 
@@ -71,8 +71,6 @@ drop table emplois cascade;
 drop table evaluations_films cascade;
 
 drop table films cascade;
-
-drop table genres cascade;
 
 drop table genres_films cascade;
 

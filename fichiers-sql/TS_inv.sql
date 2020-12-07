@@ -29,14 +29,14 @@ RETURNS TRIGGER AS
     BEGIN
         if (
             select date_naissance
-            from date_naissances
+            from DATES_NAISSANCE
             where id_artisan = new.id_artisan
         ) > new.date_deces -- La date de naissances ne peut pas etre plus tard que la date de deces
         THEN
         RAISE NOTICE 'Erreur lors de l''insertion. L''artisan n''etait pas ne a cette date!';
         RETURN null;
 
-        -- S'il n'y a aucune date de naissance dans la table DATE_NAISSANCES, on peut inserer normalement la valeur
+        -- S'il n'y a aucune date de naissance dans la table DATES_NAISSANCE, on peut inserer normalement la valeur
         ELSE RETURN new;
         end if;
     END
@@ -137,7 +137,7 @@ RETURNS TRIGGER AS
     BEGIN
         if (
             (select extract(year from date_naissance)
-            from date_naissances
+            from DATES_NAISSANCE
             where id_artisan = new.id_artisan)
             >
             (select annee_de_parution

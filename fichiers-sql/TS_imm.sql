@@ -24,10 +24,11 @@ Statut : Pret pour la remise
 -- Creation d'une view qui regroupe tous les films canadiens de la DB
 ---------------------------------------------------------------------
 CREATE OR REPLACE VIEW films_canadiens(id_film, titre, annee_de_parution, origine) as (
-    select f.id_film, f.titre, f.annee_de_parution, pf.localisation
+    select f.id_film, f.titre, f.annee_de_parution, sp.localisation
     from films f
     join productions_films pf using (id_film)
-    where pf.localisation = 'CA' -- Le film est canadien
+    join studios_productions sp using (id_studio)
+    where sp.localisation = 'CA' -- Le film est canadien
 );
 --######################################################################################################################
 
@@ -42,7 +43,7 @@ CREATE OR REPLACE VIEW films_canadiens(id_film, titre, annee_de_parution, origin
 CREATE OR REPLACE VIEW artisans_complet(id_artisan, prenom, nom, sexe, date_naissance, date_deces) as (
 select a.id_artisan, a.prenom, a.nom, a.sexe, dn.date_naissance, dd.date_deces
 from artisans a
-full join date_naissances dn using (id_artisan) -- On veut toutes les valeurs des tables meme s'il n'y a pas de match dans la jointure
+full join DATES_NAISSANCE dn using (id_artisan) -- On veut toutes les valeurs des tables meme s'il n'y a pas de match dans la jointure
 full join date_deces dd using (id_artisan)      -- On veut toutes les valeurs des tables meme s'il n'y a pas de match dans la jointure
 );
 --######################################################################################################################
