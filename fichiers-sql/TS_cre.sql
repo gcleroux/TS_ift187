@@ -1,18 +1,23 @@
+/*
+--############################################################################
+Activité : IFT187
+Trimestre : 2020-3
+Composant : TS_req.sql
+Encodage : UTF-8, sans BOM; fin de ligne Unix (LF)
+Plateforme : PostgreSQL 9.4 à 12.4
+Responsables : Guillaume.Cleroux@USherbrooke.ca,
+               Mathieu.Bouillon@USherbrooke.ca,
+               Jonathan.Bouthiette@USherbrooke.ca,
+               Leo.Chartrand@USherbrooke.ca
+Version : 1.0.3
+Statut : Pret pour la remise
+--############################################################################
+*/
+
 /*############################################################################
   un script SQL de création du schéma de base de données – domaines, types, tables
  ############################################################################*/
 
-/* ####################################################################
- Liste des modifications a faire dans le doc
-
-   - Ajouter les predicats pour les tables et les domaines
-   - Ajouter les commentaires pour les decisions que nous avons prises sur la selection de nos donnees (e.g. pourquoi on ne prend pas de date en bas de 1850)
-   - Faire la mise en page
-   - Ajouter une table VERSIONS_FILMS
-
- ####################################################################*/
-
- -- Les prix devrait avoir un attribut pour dire s'il peut etre donne a un homme, femme, ou mixte
 
 
 drop schema public cascade ;

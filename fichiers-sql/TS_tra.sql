@@ -1,10 +1,26 @@
+/*
+--############################################################################
+Activité : IFT187
+Trimestre : 2020-3
+Composant : TS_req.sql
+Encodage : UTF-8, sans BOM; fin de ligne Unix (LF)
+Plateforme : PostgreSQL 9.4 à 12.4
+Responsables : Guillaume.Cleroux@USherbrooke.ca,
+               Mathieu.Bouillon@USherbrooke.ca,
+               Jonathan.Bouthiette@USherbrooke.ca,
+               Leo.Chartrand@USherbrooke.ca
+Version : 1.0.3
+Statut : Pret pour la remise
+--############################################################################
+*/
+
 /*############################################################################
  un script SQL pour les traitements proposés – routines équivalentes à des mises à jour
  ############################################################################*/
 
 
--- #####################################################################
 
+-- #####################################################################################################################
 -- Les prochaines insertions sont erronees et inserees dans le but de demontrer les traitements proposes de update et delete.
 
 INSERT INTO Films(titre, annee_de_parution, duree, synopsis, budget) VALUES
@@ -24,10 +40,11 @@ INSERT INTO Prix(nom_prix, categorie) VALUES
 -- Manque de precision dans l'insertion du prix.
 -- Categorie du prix entree dans l'insertion au lieu de la categorie d'artisan.
 
+-- #####################################################################################################################
 
--- #####################################################################
 
 
+-- #####################################################################################################################
 -- Updates afin de modifier des entrees qui seraient incorrectes
 
 UPDATE Films SET titre = 'Pirates of the Caribbean: The Curse of the Black Pearl' WHERE titre = 'Perates des caraibes';
@@ -45,7 +62,11 @@ UPDATE Prix SET nom_prix = 'Oscars du cinema - Meilleur musique de film' WHERE n
 UPDATE Prix SET categorie = 'artisan' WHERE categorie = 'Meilleure musique de film';
 -- Mise a jour de la categorie puisqu'ici on cherche la categorie d'artisan et non la categorie de prix.
 
+-- #####################################################################################################################
 
+
+
+-- #####################################################################################################################
 -- Alter table afin de modifier le schema.
 
 ALTER TABLE Films
@@ -64,10 +85,11 @@ ALTER TABLE evaluations_films
 DROP COLUMN article;
 -- On peut retirer l'article au besoin si on cherche seulement la note des articles.
 
+-- #####################################################################################################################
 
--- #####################################################################
 
 
+-- #####################################################################################################################
 -- Delete afin de supprimer des entrees en double
 
 DELETE from Films where id_film = 47;
@@ -80,26 +102,4 @@ DELETE from Films where id_film = 46;
 DELETE from Films where id_film = 36;
 -- Delete le id_film entre en deuxieme dans la db puisque le meme film est deja present.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-- #####################################################################################################################

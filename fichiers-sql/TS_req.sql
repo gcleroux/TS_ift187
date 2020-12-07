@@ -1,3 +1,18 @@
+/*
+--############################################################################
+Activité : IFT187
+Trimestre : 2020-3
+Composant : TS_req.sql
+Encodage : UTF-8, sans BOM; fin de ligne Unix (LF)
+Plateforme : PostgreSQL 9.4 à 12.4
+Responsables : Guillaume.Cleroux@USherbrooke.ca,
+               Mathieu.Bouillon@USherbrooke.ca,
+               Jonathan.Bouthiette@USherbrooke.ca,
+               Leo.Chartrand@USherbrooke.ca
+Version : 1.0.3
+Statut : Pret pour la remise
+--############################################################################
+*/
 
 /*############################################################################
  un script SQL pour les requêtes proposées – routines équivalentes à des sélections
@@ -38,7 +53,7 @@ and pt.id_pays = 'ES'
 --######################################################################################################################
 -- 2. Quels sont les films produits aux États-Unis pour lesquels il existe une version doublée au Québec?
 ---------------------------------------------------------------------------------------------------------
-select distinct films.id_film, films.titre  -- On veut que les films apparaissent seulement une fois
+select distinct films.id_film, films.titre  -- On veut que les films apparaissent seulement une fois chaque
 from films
 join productions_films pf using (id_film)
 join doublages_films df using (id_film)
@@ -60,12 +75,16 @@ select distinct f.id_film, f.titre
 from participations_films pf
 join participations_films x using (id_film)
 join films f using (id_film)
+
+-- On veut que le film contienne l'actrice Ingrid Bergman
 where pf.id_artisan = (
     select a.id_artisan
     from artisans a
     where prenom = 'Ingrid' and
           nom = 'Bergman'
     )
+
+-- On veut que le film contienne l'actrice Marcello Mastroianni
 and x.id_artisan = (
     select a.id_artisan
     from artisans a
@@ -84,6 +103,7 @@ select distinct f.id_film, f.titre
 from films f
 join productions_films pf using (id_film)
 
+-- On veut que le film soit produit en France
 where exists(
     select *
     from productions_films
@@ -91,6 +111,7 @@ where exists(
           productions_films.id_film = pf.id_film
     )
 
+-- On veut que le film soit produit en Italie
 and exists(
     select *
     from productions_films
@@ -110,8 +131,9 @@ from artisans
 join remises_prix_artisans using (id_artisan)
 join nationalites using (id_artisan)
 
+-- L'acteur doit etre italien
 where nationalites.id_pays = 'IT' and
-      remises_prix_artisans.id_prix = (
+      remises_prix_artisans.id_prix = ( -- Selection du id_prix correspondant a la palmes d'or de Cannes
           select id_prix
           from prix
           where nom_prix ilike '%Festival de Cannes%interpretation masculine%'
@@ -124,13 +146,17 @@ where nationalites.id_pays = 'IT' and
 --######################################################################################################################
 -- 6. Quelles sont les actrices ayant une triple nationalité?
 -------------------------------------------------------------
-with nb_nationalites_femme(id_artisan, prenom, nom, total_nationalites) as(
+
+-- On cree une table temporaire pour compter et classer le nb de nationalites de toutes les femmes
+with nb_nationalites_femme(id_artisan, prenom, nom, total_nationalites) as (
     select a.id_artisan, a.prenom, a.nom, count(*) as total_nationalites
     from nationalites n
     join artisans a using (id_artisan)
     where sexe = 'F'
     group by a.id_artisan
 )
+
+-- On cherche dans notre table temporaire toutes les femmes qui on 3 nationalites
 select *
 from nb_nationalites_femme nnf
 where nnf.total_nationalites = 3
@@ -239,14 +265,20 @@ with nb_doublages_clint_eastwood(id_artisan, prenom, nom, total_doublages) as(
     select a.id_artisan, a.prenom, a.nom, count(*)
     from doublages_films df
     join artisans a on df.artisan_doubleur = a.id_artisan
+
+    -- On veut le id_artisan de Clint Eastwood
     where artisan_double = (
         select id_artisan
         from artisans
         where prenom = 'Clint' and
               nom = 'Eastwood')
-    and df.id_langue like 'fr%' -- On confond toutes les varietes linguistiques de la langue francaise
+
+    -- On confond toutes les varietes linguistiques de la langue francaise
+    and df.id_langue like 'fr%'
     group by id_artisan
 )
+
+-- On selectionne dans la table des doublages de Clint Eastwood les artisans qui l'ont double plus de 2 fois
 select *
 from nb_doublages_clint_eastwood
 where total_doublages >= 2

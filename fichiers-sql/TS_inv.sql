@@ -1,9 +1,22 @@
+/*
+--############################################################################
+Activité : IFT187
+Trimestre : 2020-3
+Composant : TS_req.sql
+Encodage : UTF-8, sans BOM; fin de ligne Unix (LF)
+Plateforme : PostgreSQL 9.4 à 12.4
+Responsables : Guillaume.Cleroux@USherbrooke.ca,
+               Mathieu.Bouillon@USherbrooke.ca,
+               Jonathan.Bouthiette@USherbrooke.ca,
+               Leo.Chartrand@USherbrooke.ca
+Version : 1.0.3
+Statut : Pret pour la remise
+--############################################################################
+*/
+
 /*############################################################################
  un script SQL pour les invariants requis – vues, routines et déclencheurs (triggers)
  ############################################################################*/
-
--- Choses a modifier
--- Ajouter un invariant pour qu'un prix masculin soit descerne a un homme
 
 
 
@@ -18,11 +31,12 @@ RETURNS TRIGGER AS
             select date_naissance
             from date_naissances
             where id_artisan = new.id_artisan
-        ) > new.date_deces
+        ) > new.date_deces -- La date de naissances ne peut pas etre plus tard que la date de deces
         THEN
         RAISE NOTICE 'Erreur lors de l''insertion. L''artisan n''etait pas ne a cette date!';
         RETURN null;
 
+        -- S'il n'y a aucune date de naissance dans la table DATE_NAISSANCES, on peut inserer normalement la valeur
         ELSE RETURN new;
         end if;
     END

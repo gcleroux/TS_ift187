@@ -1,15 +1,22 @@
+/*
+--############################################################################
+Activité : IFT187
+Trimestre : 2020-3
+Composant : TS_req.sql
+Encodage : UTF-8, sans BOM; fin de ligne Unix (LF)
+Plateforme : PostgreSQL 9.4 à 12.4
+Responsables : Guillaume.Cleroux@USherbrooke.ca,
+               Mathieu.Bouillon@USherbrooke.ca,
+               Jonathan.Bouthiette@USherbrooke.ca,
+               Leo.Chartrand@USherbrooke.ca
+Version : 1.0.3
+Statut : Pret pour la remise
+--############################################################################
+ */
+
 /*############################################################################
  un script SQL d’insertions de données de test négatives
  ############################################################################*/
-
-/* ####################################################################
- Liste des modifications a faire dans le doc
-
-   - Ajouter des insertions qui ne sont pas supposees fonctionner
-   - Expliquer pour chaque insertion pourquoi elle ne fonctionne pas avec un predicat
-   - Faire la mise en page
-
- ####################################################################*/
 
 
 
